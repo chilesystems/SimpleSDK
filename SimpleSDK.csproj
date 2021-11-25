@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Company>Chilesystems</Company>
+    <Authors>Gonzalo Bustamante Bañados</Authors>
+    <Description>SDK para integración con el Servicio de Impuesto Internos, Chile.</Description>
+    <PackageProjectUrl>www.simple-api.cl</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/chilesystems/SimpleSDK</RepositoryUrl>
+    <PackageTags>SII; Impuestos Internos; DTE; Factura Electrónica; Boleta Electrónica; Documento Tributario Electrónico</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +18,13 @@
 
   <ItemGroup>
     <Folder Include="Models\WS\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
