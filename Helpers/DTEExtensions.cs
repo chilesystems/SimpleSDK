@@ -165,7 +165,7 @@ namespace SimpleSDK.Helpers
                     form.Add(dteByte);
                 }
                 
-                var uriString = ApiBase.Url + $"envio/generar/dte";
+                var uriString = ApiBase.Url + $"envio/generar";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.PostAsync(uriString, form);
@@ -178,13 +178,122 @@ namespace SimpleSDK.Helpers
         }
 
         /// <summary>
-        /// Envía al SII un Sobre de EnvioDTE o EnvioBoleta
+        /// Obtiene el XML en codificación ISO-8859-1
         /// </summary>
-        /// <param name="envio"></param>
-        /// <param name="pathEnvio"></param>
-        /// <param name="apikey"></param>
+        /// <param name="rcof">Objeto que se transformará en XML</param>
+        /// <param name="apikey">Código de autorización. Puedes obtener uno en www.simple-api.cl</param>
         /// <returns></returns>
-        public static async Task<(bool, Models.Envios.EnvioResult)> EnviarSIIAsync(this Models.Envios.SobreEnvio envio, string pathEnvio, string apikey)
+        public static async Task<(bool, string)> GenerarXMLAsync(this Models.RCOF.ConsumoFolios rcof, string apikey)
+        {
+            using (var client = new HttpClient())
+            {
+                MultipartFormDataContent form = new MultipartFormDataContent();
+
+                string inputContent = JsonConvert.SerializeObject(rcof);
+
+                //Certificado
+                var streamCert = new StreamContent(File.OpenRead(rcof.Certificado.Ruta));
+                var certificadoByte = new ByteArrayContent(await streamCert.ReadAsByteArrayAsync());
+                certificadoByte.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                certificadoByte.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "file",
+                    FileName = $"certificado_temp_{DateTime.Now.Ticks}.pfx"
+                };
+
+
+                HttpContent jsonString = new StringContent(inputContent);
+                form.Add(jsonString, "input");
+                form.Add(certificadoByte);
+
+                var uriString = ApiBase.Url + $"rcof/generar";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
+
+                var res = await client.PostAsync(uriString, form);
+                var content = await res.Content.ReadAsStreamAsync();
+                StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
+                string xmlResultante = reader.ReadToEnd();
+
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, xmlResultante);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el XML en codificación ISO-8859-1
+        /// </summary>
+        /// <param name="libro">Objeto que se transformará en XML</param>
+        /// <param name="apikey">Código de autorización. Puedes obtener uno en www.simple-api.cl</param>
+        /// <returns></returns>
+        public static async Task<(bool, string)> GenerarXMLAsync(this Models.LCV.LibroGuia libro, string apikey)
+        {
+            using (var client = new HttpClient())
+            {
+                MultipartFormDataContent form = new MultipartFormDataContent();
+
+                string inputContent = JsonConvert.SerializeObject(libro);
+
+                //Certificado
+                var streamCert = new StreamContent(File.OpenRead(libro.Certificado.Ruta));
+                var certificadoByte = new ByteArrayContent(await streamCert.ReadAsByteArrayAsync());
+                certificadoByte.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                certificadoByte.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "file",
+                    FileName = $"certificado_temp_{DateTime.Now.Ticks}.pfx"
+                };
+
+
+                HttpContent jsonString = new StringContent(inputContent);
+                form.Add(jsonString, "input");
+                form.Add(certificadoByte);
+
+                var uriString = ApiBase.Url + $"lcv/libroguia/generar";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
+
+                var res = await client.PostAsync(uriString, form);
+                var content = await res.Content.ReadAsStreamAsync();
+                StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
+                string xmlResultante = reader.ReadToEnd();
+
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, xmlResultante);
+            }
+        }
+
+
+        ///// <summary>
+        ///// Envía al SII un EnvioDTE o EnvioBoleta
+        ///// </summary>
+        ///// <param name="envio"></param>
+        ///// <param name="pathEnvio">Ruta del archivo a enviar</param>
+        ///// <param name="apikey">Código de autorización. Puedes obtener uno en www.simple-api.cl</param>
+        ///// <returns></returns>
+
+        //public static async Task<(bool, Models.Envios.EnvioResult)> EnviarSIIAsync(this Models.Envios.SobreEnvio envio, string pathEnvio, Enum.Ambiente.AmbienteEnum ambiente, string apikey)
+        //{
+        //    var input = new Models.Envios.EnvioSII();
+        //    input.Certificado = envio.Certificado;
+        //    input.Tipo = TipoEnvio.EnvioType.EnvioDTE;
+        //    input.Ambiente = ambiente;
+        //    return await EnviarSIIAsync(input, pathEnvio, apikey);            
+        //}
+
+        ///// <summary>
+        ///// Envía al SII un LCV (Libro de guías, ventas o compras)
+        ///// </summary>
+        ///// <param name="envio"></param>
+        ///// <param name="pathEnvio">Ruta del archivo a enviar</param>
+        ///// <param name="apikey">Código de autorización. Puedes obtener uno en www.simple-api.cl</param>
+        ///// <returns></returns>
+        //public static async Task<(bool, Models.Envios.EnvioResult)> EnviarSIIAsync(this Models.LCV.LibroGuia envio, string pathEnvio, Enum.Ambiente.AmbienteEnum ambiente, string apikey)
+        //{
+        //    var input = new Models.Envios.EnvioSII();
+        //    input.Certificado = envio.Certificado;
+        //    input.Tipo = TipoEnvio.EnvioType.LVC;
+        //    input.Ambiente = ambiente;
+        //    return await EnviarSIIAsync(input, pathEnvio, apikey);
+        //}
+
+        public static async Task<(bool, Models.Envios.EnvioResult)> EnviarSIIAsync(this Models.Envios.EnvioSII envio, string pathEnvio, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -221,15 +330,57 @@ namespace SimpleSDK.Helpers
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.PostAsync(uriString, form);
+
+                if (res.IsSuccessStatusCode)
+                {
+                    var content = await res.Content.ReadAsStreamAsync();
+                    StreamReader reader = new StreamReader(content);
+                    string xmlContent = reader.ReadToEnd();
+                    var result = JsonConvert.DeserializeObject<Models.Envios.EnvioResult>(xmlContent);
+
+                    return (res.IsSuccessStatusCode, result);
+                }
+                else return (false, new Models.Envios.EnvioResult() { ResponseXml = await res.Content.ReadAsStringAsync() });
+                
+            }
+        }
+
+        public static async Task<(bool, Models.Estados.EstadoDTEResult)> ConsultarAlSII(this Models.Estados.ConsultaDTE consulta, string apikey)
+        {
+            using (var client = new HttpClient())
+            {
+                MultipartFormDataContent form = new MultipartFormDataContent();
+
+                string inputContent = JsonConvert.SerializeObject(consulta);
+
+                //Certificado
+                var streamCert = new StreamContent(File.OpenRead(consulta.Certificado.Ruta));
+                var certificadoByte = new ByteArrayContent(await streamCert.ReadAsByteArrayAsync());
+                certificadoByte.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                certificadoByte.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "file",
+                    FileName = $"certificado_temp_{DateTime.Now.Ticks}.pfx"
+                };
+
+                HttpContent jsonString = new StringContent(inputContent);
+                form.Add(jsonString, "input");
+                form.Add(certificadoByte);
+
+                var uriString = ApiBase.Url + $"estado/dte";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
+
+                var res = await client.PostAsync(uriString, form);
                 var content = await res.Content.ReadAsStreamAsync();
                 StreamReader reader = new StreamReader(content);
                 string xmlContent = reader.ReadToEnd();
 
-                var result = JsonConvert.DeserializeObject<Models.Envios.EnvioResult>(xmlContent);
+                var result = JsonConvert.DeserializeObject<Models.Estados.EstadoDTEResult>(xmlContent);
 
                 return (res.IsSuccessStatusCode, result);
             }
         }
+
 
         /// <summary>
         /// Calcula el monto Exento, Neto, IVA y Total de un DTE según sus detalles.

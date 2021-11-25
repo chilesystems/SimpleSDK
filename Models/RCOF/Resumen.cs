@@ -5,44 +5,68 @@ namespace SimpleSDK.Models.RCOF
 {
     public class Resumen
     {
-        [XmlElement("TipoDocumento")]
+        /// <summary>
+        /// Indica que el documento informado es: 
+        /// 39: Boleta Electrónica.
+        /// 41: Boleta No Afecta Exenta Electrónica
+        /// </summary>
         public Enum.TipoDTE.DTEType TipoDocumento { get; set; }
 
-        [XmlElement("MntNeto")]
+        /// <summary>
+        /// Total Monto Neto (Afecto) de documentos emitidos informados. 
+        /// En caso de Boletas Electrónicas en que la cantidad de documentos emitidos sea mayor que 0, debe contener valor
+        /// mayor o igual a 0. En el caso de Boletas No Afectas o Exentas Electrónicas debe ser cero.
+        /// </summary>
         public int MntNeto { get; set; }
-        public bool ShouldSerializeMntNeto() { return MntNeto != 0; }
-
-        [XmlElement("MntIva")]
+        /// <summary>
+        /// Total IVA de documentos emitidos informados. En caso de Boletas Electrónicas en que la cantidad de documentos emitidos
+        /// sea mayor que 0, debe contener valor mayor o igual a 0 e igual a Monto Neto* Tasa IVA.
+        /// En el caso de Boletas No Afectas o Exentas Electrónicas debería ser cero
+        /// </summary>
         public int MntIva { get; set; }
-        public bool ShouldSerializeMntIva() { return MntIva != 0; }
-
-        [XmlElement("TasaIVA")]
         public double TasaIVA { get; set; }
-        public bool ShouldSerializeTasaIVA() { return TasaIVA != 0; }
-
-        [XmlElement("MntExento")]
+        /// <summary>
+        /// Total Monto No Afecto o Exento de documentos emitidos informados.
+        /// En el caso de Boletas No Afectas Exentas Electrónicas en que la cantidad de documentos emitidos en el día
+        /// sea mayor que 0, debe contener valor mayor o igual a 0.
+        /// </summary>
         public int MntExento { get; set; }
-        public bool ShouldSerializeMntExento() { return MntExento != 0; }
-
-        [XmlElement("MntTotal")]
-        public int MntTotal { get; set; }
-
-        [XmlElement("FoliosEmitidos")]
+        /// <summary>
+        /// Suma de totales (neto, IVA y no afecto) para cada tipo de documento
+        /// </summary>
+        public int MntTotal { get { return MntNeto + MntIva + MntExento; } }
+        /// <summary>
+        /// Cantidad de Documentos del tipo correspondiente a emitidos. Se 
+        /// debe indicar la cantidad total de documentos emitidos en el
+        /// período.Si no hay documentos emitidos del tipo especificado, en
+        /// el período indicado en la carátula, se debe registrar 0.
+        /// </summary>
         public int FoliosEmitidos { get; set; }
-
-        [XmlElement("FoliosAnulados")]
+        /// <summary>
+        /// En este campo indicar Cantidad de Folios de documentos del tipo 
+        /// correspondiente anulados. Se refiere a los folios anulados en el
+        /// sistema que no corresponden a documentos enviados al SII
+        /// (Opción anulación de folios) y no a Documentos anulados
+        /// mediante Notas de Crédito Electrónicas
+        /// </summary>
         public int FoliosAnulados { get; set; }
-
-        [XmlElement("FoliosUtilizados")]
-        public int FoliosUtilizados { get; set; }
-
-        [XmlElement("RangoUtilizados")]
+        /// <summary>
+        /// Cantidad de Documentos del tipo correspondiente a emitidos y 
+        /// anulados.Si no informa folios anulados, se repite cantidad de
+        /// documentos emitidos.
+        /// </summary>
+        public int FoliosUtilizados { get { return FoliosAnulados + FoliosEmitidos; } }
+        /// <summary>
+        /// Lista que contiene un rango de folios CONSECUTIVOS utilizados 
+        /// (Hasta 5.000 posibles registros). La suma total de los folios
+        /// utilizados debe ser igual a “Cantidad de documentos utilizados en el periodo”.
+        /// </summary>
         public List<RangoUtilizados> RangoUtilizados { get; set; }
-        public bool ShouldSerializeRangoUtilizados() { return RangoUtilizados != null && RangoUtilizados.Count != 0; }
-
-        [XmlElement("RangoAnulados")]
+        /// <summary>
+        /// Lista que contiene los folios CONSECUTIVOS anulados (Hasta 5.000 posibles registros). 
+        /// La suma total de los folios anulados debe ser igual a la “Cantidad de Folios anulados en el período”
+        /// </summary>
         public List<RangoAnulados> RangoAnulados { get; set; }
-        public bool ShouldSerializeRangoAnulados() { return RangoAnulados != null && RangoAnulados.Count != 0; }
 
         public Resumen()
         {

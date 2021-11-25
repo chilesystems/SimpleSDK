@@ -6,7 +6,6 @@ namespace SimpleSDK.Services
 {
     public static class ApiBase
     {
-        //public const string Url = "https://simpleapi.chilesystems.com/api/v2/";
-        public const string Url = "https://localhost:44371/api/";
+        public const string Url = "https://api.chilesystems.com/api";
     }
 }
