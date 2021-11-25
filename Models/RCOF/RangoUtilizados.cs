@@ -4,12 +4,16 @@ namespace SimpleSDK.Models.RCOF
 {
     public class RangoUtilizados
     {
-        [XmlElement("Inicial")]
+        /// <summary>
+        /// Número de folio inicial del rango de folios utilizados en el período. 
+        /// Debe ser mayor que el “folio utilizado final” del rango precedente.
+        /// </summary>
         public long Inicial { get; set; }
-        public bool ShouldSerializeInicial() { return Inicial != 0; }
 
-        [XmlElement("Final")]
+        /// <summary>
+        /// Número de folio final del rango de folios utilizados en el período. 
+        /// Debe ser mayor que “Folio Utilizado Inicial” 
+        /// </summary>
         public long Final { get; set; }
-        public bool ShouldSerializeFinal() { return Final != 0; }
     }
 }

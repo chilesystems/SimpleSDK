@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\WS\" />
+    <Folder Include="Operations\" />
   </ItemGroup>
 
 </Project>

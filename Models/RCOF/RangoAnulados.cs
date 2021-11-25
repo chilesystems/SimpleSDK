@@ -4,13 +4,15 @@ namespace SimpleSDK.Models.RCOF
 {
     public class RangoAnulados
     {
-        [XmlElement("Inicial")]
+        /// <summary>
+        /// Número de folio inicial de rango de folios anulados. O folio individual anulado si no se trata de un rango(Inicial – Final).
+        /// </summary>
         public int Inicial { get; set; }
-        public bool ShouldSerializeInicial() { return Inicial != 0; }
 
-        [XmlElement("Final")]
+        /// <summary>
+        /// úmero de folio final de rango de folios anulados. Puede omitirse cuando se reporta folio individual
+        /// /// </summary>
         public int Final { get; set; }
-        public bool ShouldSerializeFinal() { return Final != 0; }
 
     }
 }
