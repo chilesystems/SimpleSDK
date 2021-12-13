@@ -66,7 +66,7 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, xmlResultante);
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, res.ReasonPhrase);
             }
         }
 
@@ -118,7 +118,7 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, xmlResultante);
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, res.ReasonPhrase);
             }
         }
         /// <summary>
@@ -173,7 +173,7 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, xmlResultante);
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, res.ReasonPhrase);
             }
         }
 
@@ -214,7 +214,7 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, xmlResultante);
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, res.ReasonPhrase);
             }
         }
 
@@ -255,43 +255,9 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, xmlResultante);
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, res.ReasonPhrase);
             }
         }
-
-
-        ///// <summary>
-        ///// Envía al SII un EnvioDTE o EnvioBoleta
-        ///// </summary>
-        ///// <param name="envio"></param>
-        ///// <param name="pathEnvio">Ruta del archivo a enviar</param>
-        ///// <param name="apikey">Código de autorización. Puedes obtener uno en www.simple-api.cl</param>
-        ///// <returns></returns>
-
-        //public static async Task<(bool, Models.Envios.EnvioResult)> EnviarSIIAsync(this Models.Envios.SobreEnvio envio, string pathEnvio, Enum.Ambiente.AmbienteEnum ambiente, string apikey)
-        //{
-        //    var input = new Models.Envios.EnvioSII();
-        //    input.Certificado = envio.Certificado;
-        //    input.Tipo = TipoEnvio.EnvioType.EnvioDTE;
-        //    input.Ambiente = ambiente;
-        //    return await EnviarSIIAsync(input, pathEnvio, apikey);            
-        //}
-
-        ///// <summary>
-        ///// Envía al SII un LCV (Libro de guías, ventas o compras)
-        ///// </summary>
-        ///// <param name="envio"></param>
-        ///// <param name="pathEnvio">Ruta del archivo a enviar</param>
-        ///// <param name="apikey">Código de autorización. Puedes obtener uno en www.simple-api.cl</param>
-        ///// <returns></returns>
-        //public static async Task<(bool, Models.Envios.EnvioResult)> EnviarSIIAsync(this Models.LCV.LibroGuia envio, string pathEnvio, Enum.Ambiente.AmbienteEnum ambiente, string apikey)
-        //{
-        //    var input = new Models.Envios.EnvioSII();
-        //    input.Certificado = envio.Certificado;
-        //    input.Tipo = TipoEnvio.EnvioType.LVC;
-        //    input.Ambiente = ambiente;
-        //    return await EnviarSIIAsync(input, pathEnvio, apikey);
-        //}
 
         public static async Task<(bool, Models.Envios.EnvioResult)> EnviarSIIAsync(this Models.Envios.EnvioSII envio, string pathEnvio, string apikey)
         {
