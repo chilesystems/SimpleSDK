@@ -66,7 +66,7 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, res.ReasonPhrase);
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, string.IsNullOrEmpty(xmlResultante) ? res.ReasonPhrase : xmlResultante );
             }
         }
 
@@ -118,7 +118,7 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, res.ReasonPhrase);
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, string.IsNullOrEmpty(xmlResultante) ? res.ReasonPhrase : xmlResultante);
             }
         }
         /// <summary>
@@ -173,7 +173,7 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, res.ReasonPhrase);
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, string.IsNullOrEmpty(xmlResultante) ? res.ReasonPhrase : xmlResultante);
             }
         }
 
@@ -214,7 +214,7 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, res.ReasonPhrase);
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, string.IsNullOrEmpty(xmlResultante) ? res.ReasonPhrase : xmlResultante);
             }
         }
 
@@ -255,7 +255,7 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, res.ReasonPhrase);
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, string.IsNullOrEmpty(xmlResultante) ? res.ReasonPhrase : xmlResultante);
             }
         }
 
