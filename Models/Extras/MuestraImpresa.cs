@@ -50,7 +50,7 @@ namespace SimpleSDK.Models.Extras
                 };
                 form.Add(fileByte);
 
-                var uriString = ApiBase.Url + $"pdf/timbre";
+                var uriString = ApiBase.Url + $"impresion/timbre";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.PostAsync(uriString, form);
@@ -107,7 +107,7 @@ namespace SimpleSDK.Models.Extras
                         return (true, timbreContent);
                     }
                 }
-                return (false, "Ocurrió un error");               
+                return (false, res.ReasonPhrase);               
             }
         }
     }
