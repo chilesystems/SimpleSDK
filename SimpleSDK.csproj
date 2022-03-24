@@ -5,11 +5,11 @@
     <Company>Chilesystems</Company>
     <Authors>Gonzalo Bustamante Bañados</Authors>
     <Description>SDK para integración con el Servicio de Impuesto Internos, Chile.</Description>
-    <PackageProjectUrl>https://www.simple-api.cl</PackageProjectUrl>
+    <PackageProjectUrl>https://www.simpleapi.cl</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/chilesystems/SimpleSDK</RepositoryUrl>
     <PackageTags>SII; Impuestos Internos; DTE; Factura Electrónica; Boleta Electrónica; Documento Tributario Electrónico</PackageTags>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <AssemblyVersion>1.0.2.2</AssemblyVersion>
     <FileVersion>1.0.2.2</FileVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
