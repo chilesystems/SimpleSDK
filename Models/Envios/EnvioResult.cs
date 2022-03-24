@@ -20,5 +20,10 @@ namespace SimpleSDK.Models.Envios
         public long TrackId { get; set; }
 
         public string ResponseXml { get; set; }
+
+        public override string ToString()
+        {
+            return $"Estado: {Estado} - TrackID: ${TrackId}";
+        }
     }
 }
