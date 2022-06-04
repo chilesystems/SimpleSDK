@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -12,7 +12,7 @@ namespace SimpleSDK.Helpers
 {
     public static class RCVHelper
     {
-        public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroVentasAsync(this RegistroComprasVentas registroComprasVentas, DateTime date, bool mensual, RCVData rcvData, string apikey)
+        public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroVentasAsync(DateTime date, bool mensual, RCVData rcvData, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -26,6 +26,7 @@ namespace SimpleSDK.Helpers
                 
                 var rcvDataJson = JsonConvert.SerializeObject(rcvData);
                 var formData = new (string, string)[] { ("input", rcvDataJson) };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
             
                 var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
 
@@ -40,7 +41,7 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroComprasAsync(this RegistroComprasVentas registroComprasVentas, DateTime date, bool mensual, RCVData basicData, string apikey)
+        public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroComprasAsync(DateTime date, bool mensual, RCVData basicData, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -51,13 +52,18 @@ namespace SimpleSDK.Helpers
                 string url = client.BaseAddress + $"compras/{dia}/{mes}/{anio}";
                 if (mensual)
                     url = client.BaseAddress + $"compras/{mes}/{anio}";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                string inputContent = JsonConvert.SerializeObject(basicData);
-                var rcvDataJson = JsonConvert.SerializeObject(basicData);
-                var formData = new (string, string)[] { ("input", rcvDataJson) };
-            
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
-
+                var input = JsonConvert.SerializeObject(basicData);
+                var formData = new (string, string)[] { ("input", input) };
+                FormUrlEncodedContent requestContent = new FormUrlEncodedContent(formData.ToDictionary(t => t.Item1, t => t.Item2));
+                HttpRequestMessage message = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(url),
+                    Content = requestContent
+                };
+                var res = await client.SendAsync(message);
                 if (!res.IsSuccessStatusCode)
                 {
                     return (false, null);
