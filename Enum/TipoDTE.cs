@@ -202,7 +202,8 @@ namespace SimpleSDK.Enum
             [XmlEnum("NSO")]
             NSO = 1001,
             [XmlEnum("T")]
-            T = 1001
+            T = 1001,
+            HES
         }
 
         public enum TipoDocumentoLibro : int
