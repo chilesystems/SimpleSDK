@@ -12,6 +12,8 @@ namespace SimpleSDK.Models.Estados
         public bool Ok { get { return Estado == "DOK"; } }
 
         public string GlosaEstado { get; set; }
+
+        public string ResponseXML { get; set; }
         public string ERR_CODE { get; set; }
         public string Glosa_ERR_CODE { get; set; }
 

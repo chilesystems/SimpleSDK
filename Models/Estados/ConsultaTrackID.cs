@@ -53,12 +53,17 @@ namespace SimpleSDK.Models.Estados
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.PostAsync(uriString, form);
-                var content = await res.Content.ReadAsStreamAsync();
-                StreamReader reader = new StreamReader(content);
-                string xmlContent = reader.ReadToEnd();
 
-                var result = JsonConvert.DeserializeObject<EstadoDTETrackIdResult>(xmlContent);
-                return (res.IsSuccessStatusCode, result);
+                if (res.IsSuccessStatusCode)
+                {
+                    var content = await res.Content.ReadAsStreamAsync();
+                    StreamReader reader = new StreamReader(content);
+                    string xmlContent = reader.ReadToEnd();
+
+                    var result = JsonConvert.DeserializeObject<EstadoDTETrackIdResult>(xmlContent);
+                    return (res.IsSuccessStatusCode, result);
+                }
+                else return (false, new EstadoDTETrackIdResult() { ResponseXml = res.ReasonPhrase });               
             }
         }
 

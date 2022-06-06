@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SimpleSDK.Models.Estados
 {
-    public class ConsultaDTE
+    public class ConsultaRecepcionDTE
     {
         /// <summary>
         /// Corresponde a los datos del certificado digital. Se debe indicar la ruta del archivo pfx y su contraseña.
@@ -19,8 +19,6 @@ namespace SimpleSDK.Models.Estados
         public CertificadoDigital Certificado { get; set; }
         private string _rutEmpresa { get; set; }
         private string _rutReceptor { get; set; }
-        public DateTime FechaDTE { get; set; }
-        public int Total { get; set; }
         public long Folio { get; set; }
         public short Tipo { get; set; }
         public string RutEmpresa { get { return $"{RutEmpresaCuerpo}-{RutEmpresaDV}"; } }
@@ -30,14 +28,14 @@ namespace SimpleSDK.Models.Estados
         public string RutReceptorCuerpo { get { return _rutReceptor.Substring(0, _rutReceptor.Length - 2); } }
         public string RutReceptorDV { get { return _rutReceptor.Substring(_rutReceptor.Length - 1); } }
 
-        public ConsultaDTE(string rutEmpresa, string rutReceptor)
+        public ConsultaRecepcionDTE(string rutEmpresa, string rutReceptor)
         {
             _rutEmpresa = rutEmpresa;
             _rutReceptor = rutReceptor;
         }
         public Enum.Ambiente.AmbienteEnum Ambiente { get; set; }
         public bool ServidorBoletaREST { get; set; }
-        public async Task<(bool, Models.Estados.EstadoDTEResult)> ConsultarAlSII(string apikey)
+        public async Task<(bool, Models.Estados.StatusRecepcionResult)> ConsultarAlSII(string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -59,7 +57,7 @@ namespace SimpleSDK.Models.Estados
                 form.Add(jsonString, "input");
                 form.Add(certificadoByte);
 
-                var uriString = ApiBase.Url + $"consulta/dte";
+                var uriString = ApiBase.Url + $"consulta/recepcion";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.PostAsync(uriString, form);
@@ -68,10 +66,10 @@ namespace SimpleSDK.Models.Estados
                     var content = await res.Content.ReadAsStreamAsync();
                     StreamReader reader = new StreamReader(content);
                     string xmlContent = reader.ReadToEnd();
-                    var result = JsonConvert.DeserializeObject<EstadoDTEResult>(xmlContent);
+                    var result = JsonConvert.DeserializeObject<StatusRecepcionResult>(xmlContent);
                     return (true, result);
                 }
-                else return (false, new EstadoDTEResult() {  Response = res.ReasonPhrase });
+                else return (false, new StatusRecepcionResult() {  descripcion = res.ReasonPhrase });
                
             }
         }
