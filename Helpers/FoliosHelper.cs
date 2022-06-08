@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -11,7 +12,7 @@ namespace SimpleSDK.Helpers
 {
     public static class FoliosHelper
     {
-        public static async Task<(bool response, string message, byte[] file)> ObtenerFolios(int cantidad, FoliosData input)
+        public static async Task<(bool response, string message, byte[] file)> ObtenerFolios(int cantidad, FoliosData input, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -20,6 +21,7 @@ namespace SimpleSDK.Helpers
 
                 var foliosDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", foliosDataJson) };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();
@@ -34,7 +36,7 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<(bool response, string message, int foliosDisponibles)> ConsultarMaximoFoliosDisponibles(FoliosData input)
+        public static async Task<(bool response, string message, int foliosDisponibles)> ConsultarMaximoFoliosDisponibles(FoliosData input, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -42,6 +44,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"folios/get/{input.Tipo}";
                 var foliosDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", foliosDataJson) };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();
@@ -57,7 +60,7 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<(bool, string)> AnulacionMasiva(int desde, int hasta, FoliosData input)
+        public static async Task<(bool, string)> AnulacionMasiva(int desde, int hasta, FoliosData input, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -65,6 +68,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"Folios/anulacion/masiva/{input.Tipo}/{desde}/{hasta}";
                 var foliosDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", foliosDataJson) };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();
@@ -76,7 +80,7 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<(bool response, string message, InformacionFolios info)> ResumenFolios(DateTime desde, FoliosData input)
+        public static async Task<(bool response, string message, InformacionFolios info)> ResumenFolios(DateTime desde, FoliosData input, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -84,6 +88,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"Folios/consulta/{input.Tipo}/{desde.ToString("dd-MM-yyyy")}";
                 var foliosDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", foliosDataJson) };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();

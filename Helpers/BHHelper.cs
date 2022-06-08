@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SimpleSDK.Models.BHE;
@@ -11,7 +13,7 @@ namespace SimpleSDK.Helpers
 {
     public static class BHHelper
     {
-        public static async Task<(bool, string)> EmitirAsync(BHData input)
+        public static async Task<(bool, string)> EmitirAsync(BHData input, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -19,7 +21,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/emitir/";
                 var bhDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", bhDataJson) };
-
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
                 var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
@@ -30,7 +32,7 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<(bool, string)> AnularAsync(BasicData input, int folio, CausaAnulacionBHEnum motivo)
+        public static async Task<(bool, string)> AnularAsync(BasicData input, int folio, CausaAnulacionBHEnum motivo, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -38,6 +40,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/anular/{folio}/{motivo}/";
                 var basicDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", basicDataJson) };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();
@@ -49,7 +52,7 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<(bool, string)> EnviarEmail(BHData input, int folio, int anio = 0)
+        public static async Task<(bool, string)> EnviarEmail(BHData input, int folio, string apikey, int anio = 0)
         {
             using (var client = new HttpClient())
             {
@@ -57,6 +60,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/mail/{folio}/{anio}/";
                 var basicDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", basicDataJson) };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();
@@ -68,7 +72,7 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, int anio = 0)
+        public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, string apikey, int anio = 0)
         {
             using (var client = new HttpClient())
             {
@@ -76,6 +80,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/pdf/{tipo}/{folio}/{anio}/";
                 var basicDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", basicDataJson) };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, formData);
                 var fileStream = await res.Content.ReadAsStreamAsync();
@@ -90,7 +95,7 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<ResumenAnual> ObtenerListadoAnualAsync(BasicData input, string tipo, int anio)
+        public static async Task<ResumenAnual> ObtenerListadoAnualAsync(BasicData input, string tipo, int anio, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -98,6 +103,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{anio}/";
                 var basicDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", basicDataJson) };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();
@@ -110,7 +116,7 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<ResumenMensual> ObtenerListadoMensualAsync(BasicData input, string tipo, int anio, int mes)
+        public static async Task<ResumenMensual> ObtenerListadoMensualAsync(BasicData input, string tipo, int anio, int mes, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -118,6 +124,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{mes}/{anio}/";
                 var basicDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", basicDataJson) };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();
