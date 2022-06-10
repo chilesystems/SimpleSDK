@@ -16,13 +16,13 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var dia = date.Day;
                 var mes = date.Month;
                 var anio = date.Year;
-                string url = client.BaseAddress + $"ventas/{dia}/{mes}/{anio}";
+                string url = client.BaseAddress + $"rcv/ventas/{dia}/{mes}/{anio}";
                 if (mensual)
-                    url = client.BaseAddress + $"ventas/{mes}/{anio}";
+                    url = client.BaseAddress + $"rcv/ventas/{mes}/{anio}";
                 
                 var rcvDataJson = JsonConvert.SerializeObject(rcvData);
                 var formData = new (string, string)[] { ("input", rcvDataJson) };
@@ -45,13 +45,13 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var dia = date.Day;
                 var mes = date.Month;
                 var anio = date.Year;
-                string url = client.BaseAddress + $"compras/{dia}/{mes}/{anio}";
+                string url = client.BaseAddress + $"rcv/compras/{dia}/{mes}/{anio}";
                 if (mensual)
-                    url = client.BaseAddress + $"compras/{mes}/{anio}";
+                    url = client.BaseAddress + $"rcv/compras/{mes}/{anio}";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var input = JsonConvert.SerializeObject(basicData);

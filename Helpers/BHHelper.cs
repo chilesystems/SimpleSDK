@@ -17,7 +17,7 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/emitir/";
                 var bhDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", bhDataJson) };
@@ -36,7 +36,7 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/anular/{folio}/{motivo}/";
                 var basicDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", basicDataJson) };
@@ -56,7 +56,7 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/mail/{folio}/{anio}/";
                 var basicDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", basicDataJson) };
@@ -76,7 +76,7 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/pdf/{tipo}/{folio}/{anio}/";
                 var basicDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", basicDataJson) };
@@ -99,7 +99,7 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{anio}/";
                 var basicDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", basicDataJson) };
@@ -120,7 +120,7 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{mes}/{anio}/";
                 var basicDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", basicDataJson) };

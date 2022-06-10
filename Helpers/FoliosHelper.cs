@@ -16,13 +16,13 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"Folios/get/{input.Tipo}/{cantidad}";
 
                 var foliosDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", foliosDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
-
+                
                 var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
@@ -36,17 +36,23 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<(bool response, string message, int foliosDisponibles)> ConsultarMaximoFoliosDisponibles(FoliosData input, string apikey)
+        public static async Task<(bool response, string message, int foliosDisponibles)> ConsultarMaximoFoliosDisponibles(FoliosData input, string apikey, WinHttpHandler httpClientHandler = null)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(httpClientHandler))
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"folios/get/{input.Tipo}";
                 var foliosDataJson = JsonConvert.SerializeObject(input);
-                var formData = new (string, string)[] { ("input", foliosDataJson) };
+                
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
+                var multipartContent = new MultipartFormDataContent();
+                var inputContent = new StringContent(foliosDataJson, Encoding.GetEncoding("ISO-8859-1"));
+                var fileContent = new ByteArrayContent(input.CertificadoB64);
+                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-pkcs12");
+                multipartContent.Add(fileContent, "file", "file");
+                multipartContent.Add(inputContent, "input");
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, multipartContent);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
                 {
@@ -64,7 +70,7 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"Folios/anulacion/masiva/{input.Tipo}/{desde}/{hasta}";
                 var foliosDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", foliosDataJson) };
@@ -84,7 +90,7 @@ namespace SimpleSDK.Helpers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(ApiRcv.Url);
+                client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"Folios/consulta/{input.Tipo}/{desde.ToString("dd-MM-yyyy")}";
                 var foliosDataJson = JsonConvert.SerializeObject(input);
                 var formData = new (string, string)[] { ("input", foliosDataJson) };

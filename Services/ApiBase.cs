@@ -5,8 +5,8 @@
         public const string Url = "https://simpleapi.chilesystems.com/api/v1/";
     }
 
-    public static class ApiRcv
+    public static class ApiScraper
     {
-        public const string Url = "https://localhost:44380/api/rcv";
+        public const string Url = "https://scraper.chilesystems.com/api/";
     }
 }

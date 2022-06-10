@@ -21,9 +21,11 @@
     <None Remove="Operations\**" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup>    
     <PackageReference Include="CsvHelper" Version="27.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Net.Http.WinHttpHandler" Version="4.7.0" />
+    <PackageReference Update="NETStandard.Library" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

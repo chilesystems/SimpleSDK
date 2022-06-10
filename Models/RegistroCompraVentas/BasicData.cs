@@ -2,7 +2,7 @@
 {
     public class BasicData
     {
-        public string RutUsuario { get; set; }
+        public string RutCertificado { get; set; }
         public string Password { get; set; }
         public string RutEmpresa { get; set; }
         public int Ambiente { get; set; }
