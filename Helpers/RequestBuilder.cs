@@ -67,5 +67,18 @@ namespace SimpleSDK.Helpers
             var message = RequestMessage(method, uriString, formData);
             return await client.SendAsync(message);
         }
+
+
+        public static async Task<HttpResponseMessage> SendStandardRequestAsync(this HttpClient client,
+            HttpMethod method, string uriString, MultipartFormDataContent multipartFormDataContent)
+        {
+            var requestMessage = new HttpRequestMessage
+            {
+                Content = multipartFormDataContent,
+                Method = method,
+                RequestUri = new Uri(uriString),
+            };
+            return await client.SendAsync(requestMessage);
+        } 
     }
 }
