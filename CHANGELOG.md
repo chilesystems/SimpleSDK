@@ -14,3 +14,10 @@ Generación de sobre de envío
 Envío al SII
 Consulta de Estados
 Generación de muestra impresa (formato estándar)
+
+## [1.1.0] - 12-07-2022
+
+Se agregan los endpoints de las APIs:
+Boleta de Honorarios
+Folios
+RCV (Registro de Compras y Ventas)
