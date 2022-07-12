@@ -1,9 +1,40 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace SimpleSDK.Enum
 {
     public class TipoDTE
     {
+        public enum DTEFoliosType : int
+        {
+            /// <summary>
+            /// No se ha asignado un valor aún.
+            /// </summary>
+            [XmlEnum("")]
+            NotSet = 0,
+            [XmlEnum("33")]
+            FacturaElectronica = 33,
+            [XmlEnum("34")]
+            FacturaElectronicaExenta = 34,
+            [XmlEnum("46")]
+            FacturaCompraElectronica = 46,
+            [XmlEnum("110")]
+            FacturaExportacionElectronica = 110,
+            [XmlEnum("112")]
+            NotaCreditoExportacionElectronica = 112,
+            [XmlEnum("111")]
+            NotaDebitoExportacionElectronica = 111,
+            [XmlEnum("52")]
+            GuiaDespachoElectronica = 52,
+            [XmlEnum("56")]
+            NotaDebitoElectronica = 56,
+            [XmlEnum("61")]
+            NotaCreditoElectronica = 61,
+            [XmlEnum("39")]
+            BoletaElectronica = 39,
+            [XmlEnum("41")]
+            BoletaElectronicaExenta = 41
+        }
         public enum DTEType : int
         {
             /// <summary>

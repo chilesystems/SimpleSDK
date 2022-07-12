@@ -14,7 +14,9 @@ namespace SimpleSDK.Helpers
     {
         public static async Task<(bool response, string message, byte[] file)> ObtenerFolios(int cantidad, FoliosData input, string apikey)
         {
-            using (var client = new HttpClient())
+            WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
+
+            using (var client = new HttpClient(httpClientHandler))
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"Folios/get/{input.Tipo}/{cantidad}";
@@ -36,8 +38,9 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<(bool response, string message, int foliosDisponibles)> ConsultarMaximoFoliosDisponibles(FoliosData input, string apikey, WinHttpHandler httpClientHandler = null)
+        public static async Task<(bool response, string message, int foliosDisponibles)> ConsultarMaximoFoliosDisponibles(FoliosData input, string apikey)
         {
+            WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
             using (var client = new HttpClient(httpClientHandler))
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
@@ -68,7 +71,8 @@ namespace SimpleSDK.Helpers
         
         public static async Task<(bool, string)> AnulacionMasiva(int desde, int hasta, FoliosData input, string apikey)
         {
-            using (var client = new HttpClient())
+            WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
+            using (var client = new HttpClient(httpClientHandler))
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"Folios/anulacion/masiva/{input.Tipo}/{desde}/{hasta}";
@@ -82,13 +86,14 @@ namespace SimpleSDK.Helpers
                 {
                     return (false, "Ocurrió un error al anular folios desde el sii: " + contentString);
                 }
-                return (true, "");
+                return (true, contentString);
             }
         }
         
         public static async Task<(bool response, string message, InformacionFolios info)> ResumenFolios(DateTime desde, FoliosData input, string apikey)
         {
-            using (var client = new HttpClient())
+            WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
+            using (var client = new HttpClient(httpClientHandler))
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"Folios/consulta/{input.Tipo}/{desde.ToString("dd-MM-yyyy")}";

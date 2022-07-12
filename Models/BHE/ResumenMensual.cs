@@ -31,6 +31,21 @@ namespace SimpleSDK.Models.BHE
         public ReceptorItemMensual Receptor { get; set; }
         public HonorariosItemMensual Honorarios { get; set; }
 
+        public string Estado => Encabezado.Estado;
+        public int Numero => Encabezado.Numero;
+        public DateTime FechaBoleta => Encabezado.FechaBoleta;
+        public string RutEmisor => Emisor.Rut;
+        public string RazonSocialEmisor => Emisor.RazonSocial;
+        public string RutReceptor => Receptor.Rut;
+        public string RazonSocialReceptor => Receptor.RazonSocial;
+        public int Bruto => Honorarios.Brutos;
+
+        public int RetencionEmisor => Honorarios.RetencionEmisor;
+        public int RetencionReceptor => Honorarios.RetencionReceptor;
+        public int Liquido => Honorarios.Liquido;
+        public int Retenido => Honorarios.Retenido;
+        public int Pagado => Honorarios.Pagado;
+
         public DetalleItemMensual()
         {
             Encabezado = new BoletaItemMensual();

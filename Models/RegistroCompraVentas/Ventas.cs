@@ -5,12 +5,12 @@ namespace SimpleSDK.Models.RegistroCompraVentas
     public class Ventas
     {
         public List<Resumen> Resumenes { get; set; }
-        public List<DetalleVenta> DetalleVentas { get; set; }
+        public List<DetalleRCV> DetalleVentas { get; set; }
         
         public Ventas()
         {
             Resumenes = new List<Resumen>();
-            DetalleVentas = new List<DetalleVenta>();
+            DetalleVentas = new List<DetalleRCV>();
         }
     }
 }

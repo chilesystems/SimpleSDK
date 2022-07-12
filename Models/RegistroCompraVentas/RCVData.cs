@@ -8,6 +8,7 @@ namespace SimpleSDK.Models.RegistroCompraVentas
         public int Mes { get; set; }
         public string NombreMes { get { return TimeHelper.ObtenerNombreMes(Mes); } }
         public int Anio { get; set; }
+        public bool Detallado { get; set; }
         public RCVData()
         { }
     }

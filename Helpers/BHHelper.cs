@@ -13,7 +13,7 @@ namespace SimpleSDK.Helpers
 {
     public static class BHHelper
     {
-        public static async Task<(bool, string)> EmitirAsync(BHData input, string apikey)
+        public static async Task<(bool, string, Stream)> EmitirAsync(BHData input, string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -23,12 +23,16 @@ namespace SimpleSDK.Helpers
                 var formData = new (string, string)[] { ("input", bhDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
                 var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, formData);
-                var contentString = await res.Content.ReadAsStringAsync();
-                if (!res.IsSuccessStatusCode)
+                if (res.IsSuccessStatusCode)
                 {
-                    return (false, "Ocurrió un error al emitir boleta de honorarios: " + contentString);
+                    var contentString = await res.Content.ReadAsStreamAsync();
+                    return (res.IsSuccessStatusCode, string.Empty, contentString);
                 }
-                return (true, "");
+                else
+                {
+                    var contentString = await res.Content.ReadAsStringAsync();
+                    return (res.IsSuccessStatusCode, contentString, null);
+                }
             }
         }
         
@@ -74,7 +78,8 @@ namespace SimpleSDK.Helpers
         
         public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, string apikey, int anio = 0)
         {
-            using (var client = new HttpClient())
+            WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
+            using (var client = new HttpClient(httpClientHandler))
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/pdf/{tipo}/{folio}/{anio}/";
@@ -82,14 +87,14 @@ namespace SimpleSDK.Helpers
                 var formData = new (string, string)[] { ("input", basicDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, formData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
                 var fileStream = await res.Content.ReadAsStreamAsync();
                 var memoryStream = new MemoryStream();
                 await fileStream.CopyToAsync(memoryStream);
                 byte[] pdfBytes = memoryStream.ToArray();
                 if (!res.IsSuccessStatusCode)
                 {
-                    return null;
+                    throw new Exception(res.ReasonPhrase);
                 }
                 return pdfBytes;
             }
@@ -97,7 +102,8 @@ namespace SimpleSDK.Helpers
         
         public static async Task<ResumenAnual> ObtenerListadoAnualAsync(BasicData input, string tipo, int anio, string apikey)
         {
-            using (var client = new HttpClient())
+            WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
+            using (var client = new HttpClient(httpClientHandler))
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{anio}/";
@@ -118,7 +124,9 @@ namespace SimpleSDK.Helpers
         
         public static async Task<ResumenMensual> ObtenerListadoMensualAsync(BasicData input, string tipo, int anio, int mes, string apikey)
         {
-            using (var client = new HttpClient())
+            WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
+
+            using (var client = new HttpClient(httpClientHandler))
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{mes}/{anio}/";
