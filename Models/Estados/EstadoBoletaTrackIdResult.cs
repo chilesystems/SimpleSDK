@@ -7,20 +7,24 @@ namespace SimpleSDK.Models.Estados
 {
     public class EstadoBoletaTrackIdResult
     {
-        [JsonProperty("rut_emisor")]
+        [JsonProperty("rutEmisor")]
         public string RutEmisor { get; set; }
-        [JsonProperty("rut_envia")]
+        [JsonProperty("rutEnvia")]
         public string RutEnvia { get; set; }
         public long TrackId { get; set; }
-        [JsonProperty("fecha_recepcion")]
+        [JsonProperty("fechaRecepcion")]
         public string FechaRecepcion { get; set; }
         public string Estado { get; set; }
 
-        public string Response { get; set; }
         public List<EstadoEnvioBoletaEstadistica> Estadistica { get; set; }
 
-        [JsonProperty("detalle_rep_rech")]
+        [JsonProperty("detalles")]
         public List<EstadoEnvioBoletaDetalleReparosYRechazos> Detalles { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
     public class EstadoEnvioBoletaEstadistica
@@ -38,7 +42,7 @@ namespace SimpleSDK.Models.Estados
         public int? Folio { get; set; }
         public string Estado { get; set; }
         public string Descripcion { get; set; }
-        [JsonProperty("error")]
+        [JsonProperty("errores")]
         public List<EstadoEnvioBoletaError> Errores { get; set; }
     }
 

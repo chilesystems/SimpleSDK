@@ -20,14 +20,14 @@ namespace SimpleSDK.Models.Estados
         public string RutEmpresaCuerpo { get { return _rutEmpresa.Replace(".", "").Substring(0, _rutEmpresa.Replace(".", "").Length - 2); } }
         public string RutEmpresaDV { get { return _rutEmpresa.Substring(_rutEmpresa.Length - 1); } }
         public long TrackId { get; set; }
-        public bool ServidorBoletaREST { get; set; }
+        public bool ServidorBoletaREST => true;
         public Enum.Ambiente.AmbienteEnum Ambiente { get; set; }
         public ConsultaTrackID(string rutEmpresa)
         {
             _rutEmpresa = rutEmpresa;
         }
 
-        public async Task<(bool, EstadoDTETrackIdResult)> ConsultarAlSII(string apikey)
+        public async Task<(bool exito, EstadoDTETrackIdResult respuesta)> ConsultarAlSII(string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -67,7 +67,7 @@ namespace SimpleSDK.Models.Estados
             }
         }
 
-        public async Task<(bool, EstadoBoletaTrackIdResult)> ConsultarBoletasAlSII(string apikey)
+        public async Task<(bool exito, EstadoBoletaTrackIdResult respuesta)> ConsultarBoletasAlSII(string apikey)
         {
             using (var client = new HttpClient())
             {
@@ -97,8 +97,11 @@ namespace SimpleSDK.Models.Estados
                 StreamReader reader = new StreamReader(content);
                 string xmlContent = reader.ReadToEnd();
 
+
                 var result = JsonConvert.DeserializeObject<EstadoBoletaTrackIdResult>(xmlContent);
                 return (res.IsSuccessStatusCode, result);
+
+
             }
         }
     }
