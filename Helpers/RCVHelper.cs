@@ -30,16 +30,7 @@ namespace SimpleSDK.Helpers
                 var formData = new (string, string)[] { ("input", rcvDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var input = JsonConvert.SerializeObject(rcvData);
-
-                var multipartContent = new MultipartFormDataContent();
-                var inputContent = new StringContent(input, Encoding.GetEncoding("ISO-8859-1"));
-                var fileContent = new ByteArrayContent(rcvData.CertificadoB64);
-                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-pkcs12");
-                multipartContent.Add(fileContent, "file", "file");
-                multipartContent.Add(inputContent, "input");
-
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, multipartContent);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, rcvData);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
                 {
@@ -51,7 +42,7 @@ namespace SimpleSDK.Helpers
             }
         }
         
-        public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroComprasAsync(DateTime date, bool mensual, RCVData basicData, string apikey)
+        public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroComprasAsync(DateTime date, bool mensual, RCVData rcvData, string apikey)
         {
             WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
             using (var client = new HttpClient(httpClientHandler))
@@ -66,16 +57,7 @@ namespace SimpleSDK.Helpers
                     url = client.BaseAddress + $"rcv/compras/{mes}/{anio}";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var input = JsonConvert.SerializeObject(basicData);
-
-                var multipartContent = new MultipartFormDataContent();
-                var inputContent = new StringContent(input, Encoding.GetEncoding("ISO-8859-1"));
-                var fileContent = new ByteArrayContent(basicData.CertificadoB64);
-                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-pkcs12");
-                multipartContent.Add(fileContent, "file", "file");
-                multipartContent.Add(inputContent, "input");
-
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, multipartContent);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, rcvData);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
                 {

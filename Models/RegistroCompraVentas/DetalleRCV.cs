@@ -22,13 +22,13 @@ namespace SimpleSDK.Models.RegistroCompraVentas
         public string AcuseRecibo { get; set; }
         public int EstadoAcuse { get; set; }
         public int? MontoExento { get; set; }
-        public int? MontoNeto { get; set; }
+        public ulong? MontoNeto { get; set; }
         public int? MontoIvaRecuperable { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int? MontoIvaNoRecuperable { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int? CodigoIvaNoRecuperable { get; set; }
-        public int? MontoTotal { get; set; }
+        public ulong? MontoTotal { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public long? MontoNetoActivoFijo { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -69,15 +69,6 @@ namespace SimpleSDK.Models.RegistroCompraVentas
         private string _estado;
         public string Estado { get => string.IsNullOrEmpty(_estado) ? "Confirmada" : _estado; set => _estado = value; }
 
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public long? detCodigo { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public long dhdrCodigo { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public int detPcarga { get; set; }
         public DetalleRCV()
         {
             Referencias = new List<Referencia>();

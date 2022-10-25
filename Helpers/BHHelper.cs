@@ -13,20 +13,21 @@ namespace SimpleSDK.Helpers
 {
     public static class BHHelper
     {
-        public static async Task<(bool, string, Stream)> EmitirAsync(BHData input, string apikey)
+        public static async Task<(bool, string, EmisionBoleta)> EmitirAsync(BHData input, string apikey)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/emitir/";
-                var bhDataJson = JsonConvert.SerializeObject(input);
-                var formData = new (string, string)[] { ("input", bhDataJson) };
+                //var bhDataJson = JsonConvert.SerializeObject(input);
+                //var formData = new (string, string)[] { ("input", bhDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
-                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, formData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, input);
                 if (res.IsSuccessStatusCode)
                 {
-                    var contentString = await res.Content.ReadAsStreamAsync();
-                    return (res.IsSuccessStatusCode, string.Empty, contentString);
+                    var contentString = await res.Content.ReadAsStringAsync();
+                    var emisioBoleta = JsonConvert.DeserializeObject<EmisionBoleta>(contentString);
+                    return (res.IsSuccessStatusCode, string.Empty, emisioBoleta);
                 }
                 else
                 {
@@ -42,11 +43,9 @@ namespace SimpleSDK.Helpers
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/anular/{folio}/{motivo}/";
-                var basicDataJson = JsonConvert.SerializeObject(input);
-                var formData = new (string, string)[] { ("input", basicDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, formData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, input);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
                 {
@@ -62,17 +61,15 @@ namespace SimpleSDK.Helpers
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/mail/{folio}/{anio}/";
-                var basicDataJson = JsonConvert.SerializeObject(input);
-                var formData = new (string, string)[] { ("input", basicDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, formData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, input);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
                 {
                     return (false, "Ocurrió un error al enviar la boleta de honorarios electrónica por email: " + contentString);
                 }
-                return (true, "");
+                return (true, contentString);
             }
         }
         
@@ -83,11 +80,9 @@ namespace SimpleSDK.Helpers
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/pdf/{tipo}/{folio}/{anio}/";
-                var basicDataJson = JsonConvert.SerializeObject(input);
-                var formData = new (string, string)[] { ("input", basicDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, input);
                 var fileStream = await res.Content.ReadAsStreamAsync();
                 var memoryStream = new MemoryStream();
                 await fileStream.CopyToAsync(memoryStream);
@@ -107,11 +102,9 @@ namespace SimpleSDK.Helpers
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{anio}/";
-                var basicDataJson = JsonConvert.SerializeObject(input);
-                var formData = new (string, string)[] { ("input", basicDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, input);
                 var contentString = await res.Content.ReadAsStringAsync();
                 var resumenAnual = JsonConvert.DeserializeObject<ResumenAnual>(contentString);
                 if (!res.IsSuccessStatusCode)
@@ -130,11 +123,9 @@ namespace SimpleSDK.Helpers
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{mes}/{anio}/";
-                var basicDataJson = JsonConvert.SerializeObject(input);
-                var formData = new (string, string)[] { ("input", basicDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, input);
                 var contentString = await res.Content.ReadAsStringAsync();
                 var resumenMensual = JsonConvert.DeserializeObject<ResumenMensual>(contentString);
 
