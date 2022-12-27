@@ -23,8 +23,8 @@ namespace SimpleSDK.Models.DTE
         /// Por cada Guía de Despacho se puede referenciar sólo 1 DUS o MIC.
         /// </summary>
         [XmlElement("TpoDocRef")]
-        public Enum.TipoDTE.TipoReferencia TipoDocumento { get; set; }
-        public bool ShouldSerializeTipoDocumento() { return TipoDocumento != Enum.TipoDTE.TipoReferencia.NotSet; }
+        public string TipoDocumento { get; set; }
+        public bool ShouldSerializeTipoDocumento() { return !string.IsNullOrEmpty(TipoDocumento); }
 
         /// <summary>
         /// Indicador de referencia global.
@@ -96,7 +96,7 @@ namespace SimpleSDK.Models.DTE
         public Referencia()
         {
             Numero = 0;
-            TipoDocumento = Enum.TipoDTE.TipoReferencia.NotSet;
+            TipoDocumento = string.Empty;
             FolioReferencia = string.Empty;
             FechaDocumentoReferencia = DateTime.MinValue;
 

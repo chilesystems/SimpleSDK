@@ -26,8 +26,6 @@ namespace SimpleSDK.Helpers
                 if (mensual)
                     url = client.BaseAddress + $"rcv/ventas/{mes}/{anio}";
                 
-                var rcvDataJson = JsonConvert.SerializeObject(rcvData);
-                var formData = new (string, string)[] { ("input", rcvDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, rcvData);
