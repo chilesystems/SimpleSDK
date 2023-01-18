@@ -6,14 +6,17 @@ namespace SimpleSDK.Models.Estados
 {
     public class EstadoDTETrackIdResult
     {
-        public int TrackId { get; set; }
-        public string Estado { get; set; }
-
-        public bool Ok { get { return Estado == "EPR"; } }
-
+        public List<Estado> Estados { get; set; }
         public string ResponseXml { get; set; }
-
-        private string _glosa;
+        public string Response { get; set; }
+        public long TrackId { get; set; }
+        public string Estado { get; set; }
+        public bool Ok { get { return Estado == "EPR"; } }
+        public int NumeroAtencion { get; set; }
+        public DateTime FechaAtencion { get; set; }
+        private string _glosa; public string SRV_CODE { get; set; }
+        public string SQL_CODE { get; set; }
+        public string ERR_CODE { get; set; }
         public string Glosa
         {
             get
@@ -25,20 +28,6 @@ namespace SimpleSDK.Models.Estados
             }
             set { _glosa = value; }
         }
-
-        public string SRV_CODE { get; set; }
-        public string SQL_CODE { get; set; }
-        public string ERR_CODE { get; set; }
-
-        public int TipoDocumento { get; set; }
-        public int CantidadInformados { get; set; }
-        public int CantidadAceptados { get; set; }
-        public int CantidadRechazados { get; set; }
-        public int CantidadReparos { get; set; }
-
-        public int NumeroAtencion { get; set; }
-        public DateTime FechaAtencion { get; set; }
-
         private string Resolve_SRV_CODE(string code)
         {
             switch (code)
@@ -70,5 +59,19 @@ namespace SimpleSDK.Models.Estados
                 default: return string.Empty;
             }
         }
+
+        public EstadoDTETrackIdResult()
+        {
+            Estados = new List<Estado>();
+        }
+    }
+
+    public class Estado
+    {
+        public int TipoDocumento { get; set; }
+        public int CantidadInformados { get; set; }
+        public int CantidadAceptados { get; set; }
+        public int CantidadRechazados { get; set; }
+        public int CantidadReparos { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace SimpleSDK.Models.Estados
         public string RutEmpresaCuerpo { get { return _rutEmpresa.Replace(".", "").Substring(0, _rutEmpresa.Replace(".", "").Length - 2); } }
         public string RutEmpresaDV { get { return _rutEmpresa.Substring(_rutEmpresa.Length - 1); } }
         public long TrackId { get; set; }
-        public bool ServidorBoletaREST => true;
+        public bool ServidorBoletaREST { get; set; }
         public Enum.Ambiente.AmbienteEnum Ambiente { get; set; }
         public ConsultaTrackID(string rutEmpresa)
         {
