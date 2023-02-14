@@ -83,7 +83,7 @@ namespace SimpleSDK.Models.Extras
                 form.Add(jsonString, "input"); 
                 form.Add(fileByte);
 
-                var uriString = ApiBase.Url + $"impresion/{salida}/{formato}";
+                var uriString = ApiBase.Url + $"impresion/{salida}/{formato}/v2";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
                 var res = await client.PostAsync(uriString, form);
