@@ -19,6 +19,10 @@ namespace SimpleSDK.Models.Extras
         public DateTime FechaResolucion { get; set; }
         public string Vendedor { get; set; }
 
+        public string FormaPago { get; set; }
+
+        public string CondicionVenta { get; set; }
+
         public string Hora { get; set; }
 
         /// <summary>
