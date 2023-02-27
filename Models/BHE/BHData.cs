@@ -32,6 +32,8 @@ namespace SimpleSDK.Models.BHE
     {
         public int? Direccion { get; set; }
 
+        public string Rut { get; set; }
+
     }
 
     public class Receptor

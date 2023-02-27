@@ -13,12 +13,20 @@ namespace SimpleSDK.Helpers
 {
     public static class BHHelper
     {
-        public static async Task<(bool, string, EmisionBoleta)> EmitirAsync(BHData input, string apikey)
+        public static async Task<(bool, string, EmisionBoleta)> EmitirAsync(BHData input, bool isTerceros, string apikey)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(ApiScraper.Url);
-                var url = client.BaseAddress + $"BHE/emitir/";
+                string url = string.Empty;
+                if (isTerceros)
+                {
+                    url = client.BaseAddress + $"BHE/terceros/emitir/";
+                }else
+                {
+                    url = client.BaseAddress + $"BHE/emitir/";
+                }
+                
                 //var bhDataJson = JsonConvert.SerializeObject(input);
                 //var formData = new (string, string)[] { ("input", bhDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
