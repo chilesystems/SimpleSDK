@@ -96,9 +96,18 @@ namespace SimpleSDK.Models.Estados
                 var content = await res.Content.ReadAsStreamAsync();
                 StreamReader reader = new StreamReader(content);
                 string xmlContent = reader.ReadToEnd();
-
-
-                var result = JsonConvert.DeserializeObject<EstadoBoletaTrackIdResult>(xmlContent);
+                EstadoBoletaTrackIdResult result = null;
+               
+                try
+                {
+                    result = JsonConvert.DeserializeObject<EstadoBoletaTrackIdResult>(xmlContent);
+                }
+                catch 
+                {
+                    result = new EstadoBoletaTrackIdResult();
+                    result.Estado = xmlContent;
+                }
+        
                 return (res.IsSuccessStatusCode, result);
 
 

@@ -71,7 +71,12 @@ namespace SimpleSDK.Models.Estados
                     var result = JsonConvert.DeserializeObject<EstadoDTEResult>(xmlContent);
                     return (true, result);
                 }
-                else return (false, new EstadoDTEResult() {  Response = res.ReasonPhrase });
+                else {
+                    EstadoDTEResult result = new EstadoDTEResult();
+                    result.Response = res.ReasonPhrase;
+                    result.Estado = await res.Content.ReadAsStringAsync();
+                    return (false, result);
+                    }
                
             }
         }
