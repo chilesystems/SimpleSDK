@@ -349,7 +349,7 @@ namespace SimpleSDK.Helpers
 
 
         /// <summary>
-        /// Calcula el monto Exento, Neto, IVA y Total de un DTE según sus detalles.
+        /// Calcula el monto Exento, Neto, IVA y Total de un DTE según sus detalles. El descuento debe ir en porcentaje para que lo calcule.
         /// </summary>
         /// <param name="dte">DTE a calcular sus totales.</param>
         public static void CalcularTotales(this DTE dte)
@@ -389,13 +389,15 @@ namespace SimpleSDK.Helpers
 
                     if (retenido != 0)
                     {
-                        dte.Documento.Encabezado.Totales.ImpuestosRetenciones = new List<ImpuestosRetenciones>();
-                        dte.Documento.Encabezado.Totales.ImpuestosRetenciones.Add(new ImpuestosRetenciones()
+                        dte.Documento.Encabezado.Totales.ImpuestosRetenciones = new List<ImpuestosRetenciones>
                         {
-                            MontoImpuesto = retenido,
-                            TasaImpuesto = 19,
-                            TipoImpuesto = TipoImpuesto.TipoImpuestoEnum.IVARetenidoTotal
-                        });
+                            new ImpuestosRetenciones()
+                            {
+                                MontoImpuesto = retenido,
+                                TasaImpuesto = 19,
+                                TipoImpuesto = TipoImpuesto.TipoImpuestoEnum.IVARetenidoTotal
+                            }
+                        };
                     }
                 }
 
@@ -417,7 +419,20 @@ namespace SimpleSDK.Helpers
                         .Where(x => x.IndicadorExento == IndicadorFacturacionExencionEnum.NoAfectoOExento)
                         .Sum(x => x.MontoItem);
 
+                    var descuentos = dte.Documento.DescuentosRecargos?
+                       .Where(x => x.TipoMovimiento == TipoMovimiento.TipoMovimientoEnum.Descuento
+                       && x.TipoValor == ExpresionDinero.ExpresionDineroEnum.Porcentaje)
+                       .Sum(x => x.Valor);
+
                     var neto = totalBrutoAfecto / 1.19;
+
+                    if (descuentos.HasValue && descuentos.Value > 0)
+                        {
+                            var montoDescuentoAfecto = (int)Math.Round(neto * (descuentos.Value / 100), 0, MidpointRounding.AwayFromZero);
+                            neto -= montoDescuentoAfecto;
+                        }
+
+                   
                     var iva = (int)Math.Round(neto * 0.19, 0, MidpointRounding.AwayFromZero);
                     dte.Documento.Encabezado.Totales.IVA = iva;
                     dte.Documento.Encabezado.Totales.MontoNeto = (int)Math.Round(neto, 0, MidpointRounding.AwayFromZero);
