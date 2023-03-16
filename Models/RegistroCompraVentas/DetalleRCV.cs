@@ -15,7 +15,7 @@ namespace SimpleSDK.Models.RegistroCompraVentas
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string RutCliente { get; set; }
         public string RazonSocial { get; set; }
-        public int Folio { get; set; }
+        public long Folio { get; set; }
         public DateTime FechaEmision { get; set; }
         public DateTime? FechaRecepcion { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
