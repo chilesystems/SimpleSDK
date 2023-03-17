@@ -17,8 +17,6 @@ namespace SimpleSDK.Models.DTE
         public string Id { get { return _id.Truncate(20); } set { _id = value; } }
         public bool ShouldSerializeId() { return !String.IsNullOrEmpty(Id); }
 
-        [XmlElement]
-        private string _nacionalidad;
         /// <summary>
         /// Nacionalidad del receptor extranjero.
         /// Corresponde a la nacionalidad del extranjero, según tabla de países de Aduana. 
