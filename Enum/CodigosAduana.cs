@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace SimpleSDK.Enum
 {
@@ -24,72 +25,129 @@ namespace SimpleSDK.Enum
 
         public enum Moneda
         {
+            [Description("No Asignado")]
             [XmlEnum("")]
-            NotSet,
+            NotSet = 0,
+            [Description("Peso")]
             [XmlEnum("PESO")]
-            PESO,
+            PESO = 1,
+            [Description("Peso Chileno")]
             [XmlEnum("PESO CL")]
-            PESO_CHILENO,
+            PESO_CHILENO = 200,
+            [Description("Dolar Estadounidense")]
             [XmlEnum("DOLAR USA")]
-            DOLAR_ESTADOUNIDENSE,
+            DOLAR_ESTADOUNIDENSE = 13,
+            [Description("Bolivar")]
             [XmlEnum("BOLIVAR")]
-            BOLIVAR,
+            BOLIVAR = 134,
+            [Description("Boliviano")]
             [XmlEnum("BOLIVIANO")]
-            BOLIVIANO,
+            BOLIVIANO = 4,
+            [Description("Chelin")]
             [XmlEnum("CHELIN")]
-            CHELIN,
+            CHELIN = 37,
+            [Description("Corona Din")]
             [XmlEnum("CORONA DIN")]
-            CORONA_DINAMARCA,
+            CORONA_DINAMARCA = 51,
+            [Description("Cruzeiro Real")]
             [XmlEnum("CRUZEIRO REAL")]
-            CRUZEIRO_REAL,
+            CRUZEIRO_REAL = 5,
+            [Description("Dirham")]
             [XmlEnum("DIRHAM")]
-            DIRHAM,
+            DIRHAM = 139,
+            [Description("Dolar Australiano")]
             [XmlEnum("DOLAR AUST")]
-            DOLAR_AUSTRALIANO,
+            DOLAR_AUSTRALIANO = 36,
+            [Description("Dolar Canadiense")]
             [XmlEnum("DOLAR CAN")]
-            DOLAR_CANADIENSE,
+            DOLAR_CANADIENSE = 6,
+            [Description("Euro")]
             [XmlEnum("EURO")]
-            EURO,
+            EURO = 142,
+            [Description("Franco Belga")]
             [XmlEnum("FRANCO BEL")]
-            FRANCO_BEL,
+            FRANCO_BEL = 40,
+            [Description("Franco Francés")]
             [XmlEnum("FRANCO FR")]
-            FRANCO_BR,
+            FRANCO_FR = 58,
+            [Description("Franco Suizo")]
             [XmlEnum("FRANCO SZ")]
-            FRANCO_SZ,
+            FRANCO_SZ = 82,
+            [Description("Guarani")]
             [XmlEnum("GUARANI")]
-            GUARANI,
+            GUARANI = 23,
+            [Description("Libra Esterlina")]
             [XmlEnum("LIBRA EST")]
-            LIBRA_EST,
+            LIBRA_EST = 102,
+            [Description("Lira")]
             [XmlEnum("LIRA")]
-            LIRA,
+            LIRA = 071,
+            [Description("Marco Alemán")]
             [XmlEnum("MARCO AL")]
-            MARCO_AL,
+            MARCO_AL = 30,
+            [Description("Marco Finlandés")]
             [XmlEnum("MARCO FIN")]
-            MARCO_FIN,
+            MARCO_FIN = 57,
+            [Description("Nuevo Sol")]
             [XmlEnum("NUEVO SOL")]
-            NUEVO_SOL,
+            NUEVO_SOL = 24,
+            [Description("Otras Monedas")]
             [XmlEnum("OTRAS MONEDAS")]
-            OTRAS_MONEDAS,
+            OTRAS_MONEDAS = 900,
+            [Description("Peseta")]
             [XmlEnum("PESETA")]
-            PESETA,
-            [XmlEnum("PESO CL")]
-            PESO_CL,
+            PESETA = 53,
+            [Description("Peso Colombiano")]
             [XmlEnum("PESO COL")]
-            PESO_COL,
+            PESO_COL = 129,
+            [Description("Peso Mexicano")]
             [XmlEnum("PESO MEX")]
-            PESO_MEX,
+            PESO_MEX = 132,
+            [Description("Peso Uruguayo")]
             [XmlEnum("PESO URUG")]
-            PESO_URUG,
+            PESO_URUG = 26,
+            [Description("Rand")]
             [XmlEnum("RAND")]
-            RAND,
+            RAND = 128,
+            [Description("Renminbi")]
             [XmlEnum("RENMINBI")]
-            RENMINBI,
+            RENMINBI = 48,
+            [Description("Rupia")]
             [XmlEnum("RUPIA")]
-            RUPIA,
+            RUPIA = 137,
+            [Description("Sucre")]
             [XmlEnum("SUCRE")]
-            SUCRE,
+            SUCRE = 130,
+            [Description("Yen")]
             [XmlEnum("YEN")]
-            YEN
+            YEN = 72,
+            [Description("Florin")]
+            [XmlEnum("FLORIN")]
+            FLORIN = 64,
+            [Description("Corona Noruega")]
+            [XmlEnum("CORONA NOR")]
+            CORONA_NOR = 96,
+            [Description("Dólar Neozeolandés")]
+            [XmlEnum("DOLAR NZ")]
+            DOLAR_NZ = 97,
+            [Description("Corona Sueca")]
+            [XmlEnum("CORONA SC")]
+            CORONA_SC = 113,
+            [Description("Dolar Hong Kong")]
+            [XmlEnum("DOLAR HK")]
+            DOLAR_HK = 127,
+            [Description("Dracma")]
+            [XmlEnum("DRACMA")]
+            DRACMA = 131,
+            [Description("Escudo")]
+            [XmlEnum("ESCUDO")]
+            ESCUDO = 133,
+            [Description("Dólar Singapur")]
+            [XmlEnum("DOLAR SIN")]
+            DOLAR_SIN = 136,
+            [Description("Dólar Tailandés")]
+            [XmlEnum("DOLAR TAI")]
+            DOLAR_TAI = 138,
         }
 
         public enum ModalidadVenta : int

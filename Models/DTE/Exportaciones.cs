@@ -71,20 +71,6 @@ namespace SimpleSDK.Models.DTE
         public List<ComisionRecargo> Comisiones { get; set; }
         public bool ShouldSerializeComisiones() { return Comisiones == null ? false : Comisiones.Count == 0 ? false : true; }
 
-        /// <summary>
-        /// Fecha y hora en que se firmó digitalmente el documento.
-        /// (AAAA-MM-DDTHH:MM:SS
-        /// No not set this property, set FechaHoraFirma instead.
-        /// </summary>
-        [XmlElement("TmstFirma")]
-        public string FechaHoraFirmaString { get; set; }
-
-        /// <summary>
-        /// Fecha y hora en que se firmó digitalmente el documento.
-        /// (AAAA-MM-DDTHH:MM:SS
-        /// </summary>
-        [XmlIgnore]
-        public DateTime FechaHoraFirma { get { return DateTime.Parse(FechaHoraFirmaString); } set { FechaHoraFirmaString = value.ToString("yyyy-MM-ddTHH:mm:ss"); } }
 
         public Exportaciones()
         {
@@ -95,6 +81,8 @@ namespace SimpleSDK.Models.DTE
             DescuentosRecargos = null;
             Referencias = null;
             Comisiones = null;
+
+            Id = $"T_{DateTime.Now.Ticks}";
         }
     }
 }
