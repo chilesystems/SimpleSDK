@@ -13,7 +13,7 @@ namespace SimpleSDK.Models.DTE
 
         [XmlElement("Documento")]
         public Documento Documento { get; set; }
-        public bool ShouldSerializeDocumento() { return !string.IsNullOrEmpty(Documento.Id); }
+        public bool ShouldSerializeDocumento() { return Documento != null && !string.IsNullOrEmpty(Documento.Id); }
 
         [XmlElement("Exportaciones")]
         public Exportaciones Exportaciones { get; set; }
@@ -42,6 +42,25 @@ namespace SimpleSDK.Models.DTE
             {
                 Documento.Encabezado.IdentificacionDTE.IndicadorServicio = IndicadorServicio.IndicadorServicioEnum.BoletaVentasYServicios;
             }
+        }
+
+        public DTE(Emisor emisor, Receptor receptor, long folio, TipoDTE.DTEType tipo, Aduana aduana, OtraMoneda otraMoneda)
+        {
+            Exportaciones = new Exportaciones();
+            Exportaciones.Encabezado.Transporte = new Transporte();
+            Exportaciones.Encabezado.Transporte.Aduana = aduana;
+            Exportaciones.Encabezado.OtraMoneda = otraMoneda;
+
+            Certificado = new CertificadoDigital();
+
+            Exportaciones.Encabezado.Emisor = emisor;
+            Exportaciones.Encabezado.Receptor = receptor;
+
+            Exportaciones.Encabezado.IdentificacionDTE.Folio = folio;
+            Exportaciones.Encabezado.IdentificacionDTE.TipoDTE = tipo;
+            Exportaciones.Encabezado.IdentificacionDTE.FechaEmision = DateTime.Now;
+
+
         }
 
 

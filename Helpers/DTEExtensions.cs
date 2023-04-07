@@ -66,7 +66,7 @@ namespace SimpleSDK.Helpers
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
                 string xmlResultante = reader.ReadToEnd();
 
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, string.IsNullOrEmpty(xmlResultante) ? res.ReasonPhrase : xmlResultante );
+                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, string.IsNullOrEmpty(xmlResultante) ? res.ReasonPhrase : xmlResultante);
             }
         }
 
@@ -150,7 +150,7 @@ namespace SimpleSDK.Helpers
                 HttpContent jsonString = new StringContent(inputContent);
                 form.Add(jsonString, "input");
                 form.Add(certificadoByte);
-                
+
                 //Archivos XML a ser enviados
                 foreach (var pathDTE in pathDTEs)
                 {
@@ -164,7 +164,7 @@ namespace SimpleSDK.Helpers
                     };
                     form.Add(dteByte);
                 }
-                
+
                 var uriString = ApiBase.Url + $"envio/generar";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
@@ -307,7 +307,7 @@ namespace SimpleSDK.Helpers
                     return (res.IsSuccessStatusCode, result);
                 }
                 else return (false, new Models.Envios.EnvioResult() { ResponseXml = await res.Content.ReadAsStringAsync() });
-                
+
             }
         }
 
@@ -427,12 +427,12 @@ namespace SimpleSDK.Helpers
                     var neto = totalBrutoAfecto / 1.19;
 
                     if (descuentos.HasValue && descuentos.Value > 0)
-                        {
-                            var montoDescuentoAfecto = (int)Math.Round(neto * (descuentos.Value / 100), 0, MidpointRounding.AwayFromZero);
-                            neto -= montoDescuentoAfecto;
-                        }
+                    {
+                        var montoDescuentoAfecto = (int)Math.Round(neto * (descuentos.Value / 100), 0, MidpointRounding.AwayFromZero);
+                        neto -= montoDescuentoAfecto;
+                    }
 
-                   
+
                     var iva = (int)Math.Round(neto * 0.19, 0, MidpointRounding.AwayFromZero);
                     dte.Documento.Encabezado.Totales.IVA = iva;
                     dte.Documento.Encabezado.Totales.MontoNeto = (int)Math.Round(neto, 0, MidpointRounding.AwayFromZero);
@@ -447,5 +447,22 @@ namespace SimpleSDK.Helpers
             }
 
         }
+
+        /// <summary>
+        /// Calcula el monto  Total de un DTE de exportacion. según sus detalles.
+        /// </summary>
+        /// <param name="dte">DTE a calcular sus totales.</param>
+        public static void CalcularTotalesExportacion(this DTE dte, CodigosAduana.Moneda moneda)
+        {
+            var exento = dte.Exportaciones.Detalles
+                .Where(x => x.IndicadorExento == IndicadorFacturacionExencionEnum.NoAfectoOExento)
+                .Sum(x => x.MontoItem);
+
+            dte.Exportaciones.Encabezado.Totales.MontoExento = (int)Math.Round(exento, 0, MidpointRounding.AwayFromZero);
+            dte.Exportaciones.Encabezado.Totales.MontoTotal = dte.Exportaciones.Encabezado.Totales.MontoExento;
+            dte.Exportaciones.Encabezado.Totales.TipoMoneda = moneda;
+        }
+
+       
     }
 }
