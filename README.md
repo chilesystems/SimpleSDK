@@ -55,6 +55,6 @@ Puedes encontrar toda la documentación de cómo usar este SDK en el sitio https
 La documentación relevante para usar este SDK es:
 
 - Documentación general:
-  [Sitio Simple API](https://www.simple-api.cl/Productos/SDK) y
-  [Proyecto Demo](https://www.simple-api.cl/Documentacion/Demostracion).
+  [Sitio Simple API](https://www.simpleapi.cl/Productos/SDK) y
+  [Proyecto Demo](https://www.simpleapi.cl/Documentacion/Demostracion).
 - Canal de Youtube con [ejemplos, explicaciones y tutoriales](https://www.youtube.com/playlist?list=PLA3lqxJkDQaZWAiEmWA8m7YxuNCn1ZVe9).
