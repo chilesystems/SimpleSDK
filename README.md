@@ -50,7 +50,7 @@ Desde Visual Studio:
 
 ## Documentación 
 
-Puedes encontrar toda la documentación de cómo usar este SDK en el sitio https://www.simple-api.cl.
+Puedes encontrar toda la documentación de cómo usar este SDK en el sitio https://www.simpleapi.cl.
 
 La documentación relevante para usar este SDK es:
 
