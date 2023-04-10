@@ -367,15 +367,25 @@ namespace SimpleSDK.Helpers
                     .Where(x => x.IndicadorExento == IndicadorFacturacionExencionEnum.NoAfectoOExento)
                     .Sum(x => x.MontoItem);
 
-                var descuentos = dte.Documento.DescuentosRecargos?
+                var descuentoPorcentaje = dte.Documento.DescuentosRecargos?
                     .Where(x => x.TipoMovimiento == TipoMovimiento.TipoMovimientoEnum.Descuento
                     && x.TipoValor == ExpresionDinero.ExpresionDineroEnum.Porcentaje)
                     .Sum(x => x.Valor);
 
-                if (descuentos.HasValue && descuentos.Value > 0)
+                var descuentoPesos = dte.Documento.DescuentosRecargos?
+                    .Where(x => x.TipoMovimiento == TipoMovimiento.TipoMovimientoEnum.Descuento
+                    && x.TipoValor == ExpresionDinero.ExpresionDineroEnum.Pesos)
+                    .Sum(x => x.Valor);
+
+                if(descuentoPorcentaje.Value > 0 && descuentoPesos.Value > 0) throw new Exception("No se puede tener un descuento en porcentaje y pesos al mismo tiempo.");
+                if (descuentoPorcentaje.HasValue && descuentoPorcentaje.Value > 0)
                 {
-                    var montoDescuentoAfecto = (int)Math.Round(neto * (descuentos.Value / 100), 0, MidpointRounding.AwayFromZero);
+                    var montoDescuentoAfecto = (int)Math.Round(neto * (descuentoPorcentaje.Value / 100), 0, MidpointRounding.AwayFromZero);
                     neto -= montoDescuentoAfecto;
+                }
+                else if (descuentoPesos.HasValue && descuentoPesos.Value > 0) 
+                { 
+                    neto -= (int)descuentoPesos.Value;
                 }
                 var iva = (int)Math.Round(neto * 0.19, 0);
                 int retenido = 0;
