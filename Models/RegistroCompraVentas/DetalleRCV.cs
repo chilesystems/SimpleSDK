@@ -52,7 +52,7 @@ namespace SimpleSDK.Models.RegistroCompraVentas
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int? TipoDocReferencia { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public int? FolioDocReferencia { get; set; }
+        public string FolioDocReferencia { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string RutFirmante { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
