@@ -432,15 +432,16 @@ namespace SimpleSDK.Helpers
                         .Where(x => x.IndicadorExento == IndicadorFacturacionExencionEnum.NoAfectoOExento)
                         .Sum(x => x.MontoItem);
 
-                    if (descuentoPorcentaje.HasValue && descuentoPorcentaje.Value > 0)
-                    {
-                        var montoDescuentoAfecto = (int)Math.Round(neto * (descuentoPorcentaje.Value / 100), 0, MidpointRounding.AwayFromZero);
-                        neto -= montoDescuentoAfecto;
-                    }
-                    else if (descuentoPesos.HasValue && descuentoPesos.Value > 0)
-                    {
-                        neto -= (int)descuentoPesos.Value;
-                    }                    
+                    //El SII dejó de procesar las etiquetas de descuento global. Aplicar a nivel de item, no global.
+                    //if (descuentoPorcentaje.HasValue && descuentoPorcentaje.Value > 0)
+                    //{
+                    //    var montoDescuentoAfecto = (int)Math.Round(neto * (descuentoPorcentaje.Value / 100), 0, MidpointRounding.AwayFromZero);
+                    //    neto -= montoDescuentoAfecto;
+                    //}
+                    //else if (descuentoPesos.HasValue && descuentoPesos.Value > 0)
+                    //{
+                    //    neto -= (int)descuentoPesos.Value;
+                    //}                    
 
                     var iva = (int)Math.Round(neto * 0.19, 0, MidpointRounding.AwayFromZero);
                     dte.Documento.Encabezado.Totales.IVA = iva;
@@ -450,16 +451,17 @@ namespace SimpleSDK.Helpers
                 else //Boleta electrónica exenta
                 {
                     var total = dte.Documento.Detalles.Sum(x => x.MontoItem);
-                    if (descuentoPorcentaje.HasValue && descuentoPorcentaje.Value > 0)
-                    {
-                        var montoDescuentoAfecto = (int)Math.Round(total * (descuentoPorcentaje.Value / 100), 0, MidpointRounding.AwayFromZero);
-                        total -= montoDescuentoAfecto;
-                    }
-                    else if (descuentoPesos.HasValue && descuentoPesos.Value > 0)
-                    {
-                        total -= (int)descuentoPesos.Value;
-                    }
-                    
+                    //El SII dejó de procesar las etiquetas de descuento global. Aplicar a nivel de item, no global.
+                    //if (descuentoPorcentaje.HasValue && descuentoPorcentaje.Value > 0)
+                    //{
+                    //    var montoDescuentoAfecto = (int)Math.Round(total * (descuentoPorcentaje.Value / 100), 0, MidpointRounding.AwayFromZero);
+                    //    total -= montoDescuentoAfecto;
+                    //}
+                    //else if (descuentoPesos.HasValue && descuentoPesos.Value > 0)
+                    //{
+                    //    total -= (int)descuentoPesos.Value;
+                    //}
+
                     dte.Documento.Encabezado.Totales.MontoExento = dte.Documento.Encabezado.Totales.MontoTotal = total;
                 }
 
