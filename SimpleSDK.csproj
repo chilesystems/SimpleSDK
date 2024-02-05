@@ -9,9 +9,9 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/chilesystems/SimpleSDK</RepositoryUrl>
     <PackageTags>SII; Impuestos Internos; DTE; Factura Electrónica; Boleta Electrónica; Documento Tributario Electrónico</PackageTags>
-    <Version>1.2.3</Version>
-    <AssemblyVersion>1.1.0.3</AssemblyVersion>
-    <FileVersion>1.1.0.3</FileVersion>
+    <Version>1.2.5</Version>
+    <AssemblyVersion>1.1.0.4</AssemblyVersion>
+    <FileVersion>1.1.0.4</FileVersion>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>

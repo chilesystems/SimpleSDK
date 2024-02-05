@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -306,7 +307,10 @@ namespace SimpleSDK.Helpers
 
                     return (res.IsSuccessStatusCode, result);
                 }
-                else return (false, new Models.Envios.EnvioResult() { ResponseXml = await res.Content.ReadAsStringAsync() });
+
+                return (false,
+                    new Models.Envios.EnvioResult()
+                        { ResponseXml = await res.Content.ReadAsStringAsync(), Estado = res.ReasonPhrase });
 
             }
         }

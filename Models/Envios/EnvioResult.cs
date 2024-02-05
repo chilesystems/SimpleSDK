@@ -23,7 +23,7 @@ namespace SimpleSDK.Models.Envios
 
         public override string ToString()
         {
-            return $"Estado: {Estado} - TrackID: ${TrackId}";
+            return $"Estado: {Estado} - TrackID: ${TrackId}. ResponseXml: {ResponseXml}. ";
         }
     }
 }
