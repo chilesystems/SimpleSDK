@@ -28,7 +28,7 @@ namespace SimpleSDK.Helpers
                 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, rcvData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, rcvData);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
                 {
@@ -55,7 +55,7 @@ namespace SimpleSDK.Helpers
                     url = client.BaseAddress + $"rcv/compras/{mes}/{anio}";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, rcvData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, rcvData);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
                 {
