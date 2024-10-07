@@ -75,6 +75,8 @@ namespace SimpleSDK.Models.DTE
         public List<ComisionRecargo> Comisiones { get; set; }
         public bool ShouldSerializeComisiones() { return Comisiones == null ? false : Comisiones.Count == 0 ? false : true; }
 
+        public GeoRefEmision GeoRefEmision { get; set; }
+        public ManejoMadera ManejoMadera { get; set; }
         public Documento()
         {
             Encabezado = new Encabezado();

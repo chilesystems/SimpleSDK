@@ -65,7 +65,7 @@ namespace SimpleSDK.Helpers
                 var res = await client.PostAsync(uriString, form);
                 var content = await res.Content.ReadAsStreamAsync();
                 StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
-                string xmlResultante = reader.ReadToEnd();
+                string xmlResultante = await reader.ReadToEndAsync();
 
                 return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, string.IsNullOrEmpty(xmlResultante) ? res.ReasonPhrase : xmlResultante);
             }
