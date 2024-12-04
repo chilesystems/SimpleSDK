@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Company>Chilesystems</Company>
     <Authors>Gonzalo Bustamante Bañados</Authors>
-    <Description>SDK para integración con el Servicio de Impuesto Internos, Chile.</Description>
+    <Description>SDK para integración con el Servicio de Impuestos Internos, Chile.</Description>
     <PackageProjectUrl>https://www.simpleapi.cl</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/chilesystems/SimpleSDK</RepositoryUrl>
