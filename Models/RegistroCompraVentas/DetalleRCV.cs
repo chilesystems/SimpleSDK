@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.Json.Serialization;
+
 
 namespace SimpleSDK.Models.RegistroCompraVentas
 {
@@ -9,7 +9,13 @@ namespace SimpleSDK.Models.RegistroCompraVentas
     {
         public string TipoDTEString { get; set; }
         public int TipoDTE { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string TipoCompra { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string TipoVenta { get; set; }
+
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string RutProveedor { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

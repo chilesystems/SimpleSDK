@@ -21,3 +21,7 @@ Se agregan los endpoints de las APIs:
 Boleta de Honorarios
 Folios
 RCV (Registro de Compras y Ventas)
+
+## [1.2.8] - 09-12-2024
+Se corrige TipoCompra en las Ventas, cuando debería decir TipoVenta
+La información se obtene ahora desde los CSV que se descargan desde el SII
