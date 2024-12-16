@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using BHE.Models;
 using Newtonsoft.Json;
 using SimpleSDK.Models.BHE;
 using SimpleSDK.Models.RegistroCompraVentas;
@@ -144,5 +145,36 @@ namespace SimpleSDK.Helpers
                 return resumenMensual;
             }
         }
+
+        public static async Task<RegionesData> ObtenerListaComunasAsync(string apikey)
+        {
+            WinHttpHandler httpClientHandler = new WinHttpHandler()
+            {
+                ReceiveDataTimeout = TimeSpan.FromMinutes(5),
+                ReceiveHeadersTimeout = TimeSpan.FromMinutes(5)
+            };
+
+            using (var client = new HttpClient(httpClientHandler))
+            {
+                client.BaseAddress = new Uri(ApiScraper.Url);
+                var url = client.BaseAddress + "BHE/listarComunas/";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
+
+                var res = await client.GetAsync(url);
+
+                if (!res.IsSuccessStatusCode)
+                {
+                    var errorContent = await res.Content.ReadAsStringAsync();
+                    
+                    throw new Exception($"Error al obtener la lista de comunas: {res.StatusCode} - {errorContent}");
+                }
+
+                var contentString = await res.Content.ReadAsStringAsync();
+                var regionesData = JsonConvert.DeserializeObject<RegionesData>(contentString);
+
+                return regionesData;
+            }
+        }
+
     }
 }
