@@ -25,7 +25,7 @@ namespace SimpleSDK.Helpers
                 var formData = new (string, string)[] { ("input", foliosDataJson) };
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
                 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, formData);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, formData);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
                 {
