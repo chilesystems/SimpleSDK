@@ -314,7 +314,48 @@ namespace SimpleSDK.Helpers
 
             }
         }
+        public static async Task<(bool, Models.Envios.EnvioResult)> EnviarCesionAsync(this Models.Cesion.EnvioCesion datos, string pathAEC, string apikey)
+        {
+            using (var client = new HttpClient())
+            {
+                MultipartFormDataContent form = new MultipartFormDataContent();
 
+                string inputContent = JsonConvert.SerializeObject(datos);
+
+                var streamAEC = new StreamContent(File.OpenRead(pathAEC));
+                var aecByte = new ByteArrayContent(await streamAEC.ReadAsByteArrayAsync());
+                aecByte.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                aecByte.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "files",
+                    FileName = $"aec_{DateTime.Now.Ticks}.xml"
+                };
+
+                HttpContent jsonString = new StringContent(inputContent);
+                form.Add(jsonString, "input");
+                form.Add(aecByte);
+
+                var uriString = ApiBase.Url + "cesion/enviar";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
+
+                var res = await client.PostAsync(uriString, form);
+
+                if (res.IsSuccessStatusCode)
+                {
+                    var content = await res.Content.ReadAsStreamAsync();
+                    StreamReader reader = new StreamReader(content);
+                    string xmlContent = reader.ReadToEnd();
+                    var result = JsonConvert.DeserializeObject<Models.Envios.EnvioResult>(xmlContent);
+
+                    return (res.IsSuccessStatusCode, result);
+                }
+
+                return (false,
+                    new Models.Envios.EnvioResult()
+                    { ResponseXml = await res.Content.ReadAsStringAsync(), Estado = res.ReasonPhrase });
+
+            }
+        }
         public static async Task<(bool, Models.Estados.EstadoDTEResult)> ConsultarAlSII(this Models.Estados.ConsultaDTE consulta, string apikey)
         {
             using (var client = new HttpClient())
