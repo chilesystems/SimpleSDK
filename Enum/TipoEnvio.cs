@@ -12,7 +12,8 @@ namespace SimpleSDK.Enum
             EnvioDTE = 1,
             EnvioBoleta = 2,
             LVC = 3,
-            RVD = 4
+            RVD = 4,
+            Cesion = 5
         }
 
         public enum ValidacionType : int
