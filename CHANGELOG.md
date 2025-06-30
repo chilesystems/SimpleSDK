@@ -25,3 +25,6 @@ RCV (Registro de Compras y Ventas)
 ## [1.2.8] - 09-12-2024
 Se corrige TipoCompra en las Ventas, cuando debería decir TipoVenta
 La información se obtene ahora desde los CSV que se descargan desde el SII
+
+## [1.2.9] - 30-06-2025
+Se agrega el método EnviarCesionAsync para enviar cesiones electrónicas.
