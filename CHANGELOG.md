@@ -26,5 +26,11 @@ RCV (Registro de Compras y Ventas)
 Se corrige TipoCompra en las Ventas, cuando debería decir TipoVenta
 La información se obtene ahora desde los CSV que se descargan desde el SII
 
-## [1.2.9] - 30-06-2025
+## [1.2.9] - 16-12-2024
+Se incorpora endpoint para listar comunas
+
+## [1.3.0] - 31-01-2025
+Se corrige verbo de petición para la consulta de Folios, de GET a POST.
+
+## [1.3.1] - 30-06-2025
 Se agrega el método EnviarCesionAsync para enviar cesiones electrónicas.
