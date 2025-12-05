@@ -113,7 +113,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{anio}/";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, input);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, input);
                 var contentString = await res.Content.ReadAsStringAsync();
                 var resumenAnual = JsonConvert.DeserializeObject<ResumenAnual>(contentString);
                 if (!res.IsSuccessStatusCode)
@@ -134,7 +134,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{mes}/{anio}/";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
-                var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, input);
+                var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, input);
                 var contentString = await res.Content.ReadAsStringAsync();
                 var resumenMensual = JsonConvert.DeserializeObject<ResumenMensual>(contentString);
 

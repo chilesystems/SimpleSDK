@@ -34,3 +34,6 @@ Se corrige verbo de petición para la consulta de Folios, de GET a POST.
 
 ## [1.3.1] - 30-06-2025
 Se agrega el método EnviarCesionAsync para enviar cesiones electrónicas.
+
+## [1.4.1] - 28-11-2025
+Se corrige verbo de petición para la consulta de BHE, de GET a POST.
