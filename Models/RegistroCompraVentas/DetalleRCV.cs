@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-
-
 namespace SimpleSDK.Models.RegistroCompraVentas
 {
     public class DetalleRCV

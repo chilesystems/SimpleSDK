@@ -14,7 +14,7 @@ namespace SimpleSDK.Models.DTE
         /// Identificación y totales del documento.
         /// </summary>
         [XmlElement("Encabezado")]
-        public Encabezado Encabezado { get; set; }
+        public EncabezadoExportacion Encabezado { get; set; }
 
         /// <summary>
         /// Detalle de ítemes del DTE.
@@ -74,7 +74,7 @@ namespace SimpleSDK.Models.DTE
 
         public Exportaciones()
         {
-            Encabezado = new Encabezado();
+            Encabezado = new EncabezadoExportacion();
             Detalles = new List<DetalleExportacion>();
 
             SubTotales = null;
