@@ -37,3 +37,4 @@ Se agrega el método EnviarCesionAsync para enviar cesiones electrónicas.
 
 ## [1.4.1] - 28-11-2025
 Se corrige verbo de petición para la consulta de BHE, de GET a POST.
+Se corrige emisión de documentos de exportación
