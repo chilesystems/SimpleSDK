@@ -8,6 +8,6 @@
 
     public static class ApiScraper
     {
-        public const string Url = "https://localhost:7258/api/";
+        public const string Url = "https://servicios.simpleapi.cl/api/";
     }
 }
