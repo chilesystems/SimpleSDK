@@ -84,7 +84,7 @@ namespace SimpleSDK.Helpers
             }
         }
 
-        public static async Task<(bool, string)> EnviarEmail(BHData input, int folio, string apikey, int anio = 0, string nombreCertificado)
+        public static async Task<(bool, string)> EnviarEmail(BHData input, int folio, string apikey, string nombreCertificado, int anio = 0)
         {
             using (var client = new HttpClient())
             {
@@ -92,6 +92,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/mail/{folio}/{anio}/";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
+                var inputJson = JsonConvert.SerializeObject(input);
                 using (var form = new MultipartFormDataContent())
                 {
                     form.Add(new StringContent(inputJson, Encoding.UTF8, "application/json"), "input");
@@ -110,7 +111,7 @@ namespace SimpleSDK.Helpers
                 }
             }
         }
-        public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, string apikey, int anio = 0, string nombreCertificado)
+        /*public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, string apikey, string nombreCertificado, int anio = 0)
         {
             WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
             using (var client = new HttpClient(httpClientHandler))
@@ -119,6 +120,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/pdf/{tipo}/{folio}/{anio}/";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
+                var inputJson = JsonConvert.SerializeObject(input);
                 using (var form = new MultipartFormDataContent())
                 {
                     form.Add(new StringContent(inputJson, Encoding.UTF8, "application/json"), "input");
@@ -139,7 +141,7 @@ namespace SimpleSDK.Helpers
                     return pdfBytes;
                 }
             }
-        }
+        }*/
 
         public static async Task<ResumenAnual> ObtenerListadoAnualAsync(BasicData input, string tipo, int anio, string apikey, string nombreCertificado)
         {
@@ -150,6 +152,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{anio}/";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
+                var inputJson = JsonConvert.SerializeObject(input);
                 using (var form = new MultipartFormDataContent())
                 {
                     form.Add(new StringContent(inputJson, Encoding.UTF8, "application/json"), "input");
@@ -180,6 +183,7 @@ namespace SimpleSDK.Helpers
                 var url = client.BaseAddress + $"BHE/listado/{tipo}/{mes}/{anio}/";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
+                var inputJson = JsonConvert.SerializeObject(input);
                 using (var form = new MultipartFormDataContent())
                 {
                     form.Add(new StringContent(inputJson, Encoding.UTF8, "application/json"), "input");
@@ -270,7 +274,7 @@ namespace SimpleSDK.Helpers
             }
         }*/
 
-        /*public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, string apikey, int anio = 0)
+        public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, string apikey, int anio = 0)
         {
             WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
             using (var client = new HttpClient(httpClientHandler))
@@ -290,7 +294,7 @@ namespace SimpleSDK.Helpers
                 }
                 return pdfBytes;
             }
-        }*/
+        }
 
         /*public static async Task<ResumenAnual> ObtenerListadoAnualAsync(BasicData input, string tipo, int anio, string apikey)
         {
