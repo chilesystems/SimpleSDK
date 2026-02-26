@@ -11,7 +11,7 @@ namespace SimpleSDK.Helpers
 {
     public static class RCVHelper
     {
-        public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroVentasAsync(DateTime date, bool mensual, RCVData rcvData, string apikey)
+        public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroVentasAsync(DateTime date, bool mensual, BasicData rcvData, string apikey, string nombreCertificado)
         {
             WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
             using (var client = new HttpClient(httpClientHandler))
@@ -26,19 +26,93 @@ namespace SimpleSDK.Helpers
                 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
 
+                var inputJson = JsonConvert.SerializeObject(rcvData);
+                using (var form = new MultipartFormDataContent())
+                {
+                    form.Add(new StringContent(inputJson, Encoding.UTF8, "application/json"), "input");
+
+                    var fileContent = new ByteArrayContent(rcvData.CertificadoB64);
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-pkcs12");
+                    form.Add(fileContent, "certificado", nombreCertificado);
+
+                    var res = await client.PostAsync(url, form);
+                    var contentString = await res.Content.ReadAsStringAsync();
+                    if (!res.IsSuccessStatusCode)
+                    {
+                        throw new Exception(res.ReasonPhrase + Environment.NewLine + contentString);
+                    }
+
+                    var registroCompraVenta = JsonConvert.DeserializeObject<RegistroComprasVentas>(contentString);
+                    return (true, registroCompraVenta);
+                }
+            }
+        }
+
+        public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroComprasAsync(DateTime date, bool mensual, BasicData rcvData, string apikey, string nombreCertificado)
+        {
+            WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
+            using (var client = new HttpClient(httpClientHandler))
+            {
+                client.BaseAddress = new Uri(ApiScraper.Url);
+                var dia = date.Day;
+                var mes = date.Month;
+                var anio = date.Year;
+                client.Timeout = TimeSpan.FromMinutes(3);
+                string url = client.BaseAddress + $"rcv/compras/{dia}/{mes}/{anio}";
+                if (mensual)
+                    url = client.BaseAddress + $"rcv/compras/{mes}/{anio}";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
+                var inputJson = JsonConvert.SerializeObject(rcvData);
+                using (var form = new MultipartFormDataContent())
+                {
+                    form.Add(new StringContent(inputJson, Encoding.UTF8, "application/json"), "input");
+
+                    var fileContent = new ByteArrayContent(rcvData.CertificadoB64);
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-pkcs12");
+                    form.Add(fileContent, "certificado", nombreCertificado);
+
+                    var res = await client.PostAsync(url, form);
+                    var contentString = await res.Content.ReadAsStringAsync();
+                    if (!res.IsSuccessStatusCode)
+                    {
+                        throw new Exception(res.ReasonPhrase + Environment.NewLine + contentString);
+                    }
+
+                    var registroCompraVenta = JsonConvert.DeserializeObject<RegistroComprasVentas>(contentString);
+                    return (true, registroCompraVenta);
+                }
+            }
+        }
+
+
+        /*public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroVentasAsync(DateTime date, bool mensual, RCVData rcvData, string apikey)
+        {
+            WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
+            using (var client = new HttpClient(httpClientHandler))
+            {
+                client.BaseAddress = new Uri(ApiScraper.Url);
+                var dia = date.Day;
+                var mes = date.Month;
+                var anio = date.Year;
+                string url = client.BaseAddress + $"rcv/ventas/{dia}/{mes}/{anio}";
+                if (mensual)
+                    url = client.BaseAddress + $"rcv/ventas/{mes}/{anio}";
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
+
                 var res = await client.SendStandardRequestAsync(HttpMethod.Post, url, rcvData);
                 var contentString = await res.Content.ReadAsStringAsync();
                 if (!res.IsSuccessStatusCode)
                 {
                     throw new Exception(res.ReasonPhrase + Environment.NewLine + contentString);
                 }
-                
+
                 var registroCompraVenta = JsonConvert.DeserializeObject<RegistroComprasVentas>(contentString);
                 return (true, registroCompraVenta);
             }
-        }
-        
-        public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroComprasAsync(DateTime date, bool mensual, RCVData rcvData, string apikey)
+        }*/
+
+        /*public static async Task<(bool, RegistroComprasVentas)> ConsultaRegistroComprasAsync(DateTime date, bool mensual, RCVData rcvData, string apikey)
         {
             WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
             using (var client = new HttpClient(httpClientHandler))
@@ -64,6 +138,6 @@ namespace SimpleSDK.Helpers
                 var registroCompraVenta = JsonConvert.DeserializeObject<RegistroComprasVentas>(contentString);
                 return (true, registroCompraVenta);
             }
-        }
+        }*/
     }
 }
