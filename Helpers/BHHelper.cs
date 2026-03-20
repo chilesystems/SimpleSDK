@@ -111,7 +111,7 @@ namespace SimpleSDK.Helpers
                 }
             }
         }
-        /*public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, string apikey, string nombreCertificado, int anio = 0)
+        public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, string apikey, string nombreCertificado, int anio = 0)
         {
             WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
             using (var client = new HttpClient(httpClientHandler))
@@ -129,7 +129,7 @@ namespace SimpleSDK.Helpers
                     fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-pkcs12");
                     form.Add(fileContent, "certificado", nombreCertificado);
 
-                    var res = await client.GetAsync(url, form);
+                    var res = await client.SendStandardRequestAsync(HttpMethod.Get, url, form);
                     var fileStream = await res.Content.ReadAsStreamAsync();
                     var memoryStream = new MemoryStream();
                     await fileStream.CopyToAsync(memoryStream);
@@ -141,7 +141,7 @@ namespace SimpleSDK.Helpers
                     return pdfBytes;
                 }
             }
-        }*/
+        }
 
         public static async Task<ResumenAnual> ObtenerListadoAnualAsync(BasicData input, string tipo, int anio, string apikey, string nombreCertificado)
         {
@@ -274,7 +274,7 @@ namespace SimpleSDK.Helpers
             }
         }*/
 
-        public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, string apikey, int anio = 0)
+        /*public static async Task<byte[]> ObtenerPdfBoletaAsync(BHData input, string tipo, int folio, string apikey, int anio = 0)
         {
             WinHttpHandler httpClientHandler = new WinHttpHandler() { ReceiveDataTimeout = TimeSpan.FromMinutes(10), ReceiveHeadersTimeout = TimeSpan.FromMinutes(10) };
             using (var client = new HttpClient(httpClientHandler))
@@ -294,7 +294,7 @@ namespace SimpleSDK.Helpers
                 }
                 return pdfBytes;
             }
-        }
+        }*/
 
         /*public static async Task<ResumenAnual> ObtenerListadoAnualAsync(BasicData input, string tipo, int anio, string apikey)
         {
