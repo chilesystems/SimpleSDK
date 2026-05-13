@@ -70,58 +70,6 @@ namespace SimpleSDK.Helpers
                 return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, string.IsNullOrEmpty(xmlResultante) ? res.ReasonPhrase : xmlResultante);
             }
         }
-
-        /// <summary>
-        /// Obtiene el XML en codificación ISO-8859-1
-        /// </summary>
-        /// <param name="aec">Objeto que se transformará en XML</param>
-        /// <param name="pathDTE">Ruta al archivo DTE que se está cediendo</param>
-        /// <param name="apikey">Código de autorización. Puedes obtener uno en www.simple-api.cl</param>
-        /// <returns>Tupla (bool, string). El primer argumento indica si la operación fue exitosa. El segundo el mensaje del resultado</returns>
-        public static async Task<(bool, string)> GenerarXMLAsync(this Models.Cesion.AEC aec, string pathDTE, string apikey)
-        {
-            using (var client = new HttpClient())
-            {
-                MultipartFormDataContent form = new MultipartFormDataContent();
-
-                string inputContent = JsonConvert.SerializeObject(aec);
-
-                //Certificado
-                var streamCert = new StreamContent(File.OpenRead(aec.Certificado.Ruta));
-                var certificadoByte = new ByteArrayContent(await streamCert.ReadAsByteArrayAsync());
-                certificadoByte.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-                certificadoByte.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-                {
-                    Name = "file",
-                    FileName = $"certificado_temp_{DateTime.Now.Ticks}.pfx"
-                };
-
-                //Archivo XML: DTE Cedido
-                var streamDTE = new StreamContent(File.OpenRead(pathDTE));
-                var dteByte = new ByteArrayContent(await streamDTE.ReadAsByteArrayAsync());
-                dteByte.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-                dteByte.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-                {
-                    Name = "file",
-                    FileName = "dte_cedido.xml"
-                };
-
-                HttpContent jsonString = new StringContent(inputContent);
-                form.Add(jsonString, "input");
-                form.Add(certificadoByte);
-                form.Add(dteByte);
-
-                var uriString = ApiBase.Url + "dte/cesion/generar";
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
-
-                var res = await client.PostAsync(uriString, form);
-                var content = await res.Content.ReadAsStreamAsync();
-                StreamReader reader = new StreamReader(content, Encoding.GetEncoding("ISO-8859-1"));
-                string xmlResultante = reader.ReadToEnd();
-
-                return res.IsSuccessStatusCode ? (true, xmlResultante) : (false, string.IsNullOrEmpty(xmlResultante) ? res.ReasonPhrase : xmlResultante);
-            }
-        }
         /// <summary>
         /// Obtiene el XML en codificación ISO-8859-1
         /// </summary>
@@ -311,48 +259,6 @@ namespace SimpleSDK.Helpers
                 return (false,
                     new Models.Envios.EnvioResult()
                         { ResponseXml = await res.Content.ReadAsStringAsync(), Estado = res.ReasonPhrase });
-
-            }
-        }
-        public static async Task<(bool, Models.Envios.EnvioResult)> EnviarCesionAsync(this Models.Cesion.EnvioCesion datos, string pathAEC, string apikey)
-        {
-            using (var client = new HttpClient())
-            {
-                MultipartFormDataContent form = new MultipartFormDataContent();
-
-                string inputContent = JsonConvert.SerializeObject(datos);
-
-                var streamAEC = new StreamContent(File.OpenRead(pathAEC));
-                var aecByte = new ByteArrayContent(await streamAEC.ReadAsByteArrayAsync());
-                aecByte.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-                aecByte.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-                {
-                    Name = "files",
-                    FileName = $"aec_{DateTime.Now.Ticks}.xml"
-                };
-
-                HttpContent jsonString = new StringContent(inputContent);
-                form.Add(jsonString, "input");
-                form.Add(aecByte);
-
-                var uriString = ApiBase.Url + "cesion/enviar";
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{apikey}")));
-
-                var res = await client.PostAsync(uriString, form);
-
-                if (res.IsSuccessStatusCode)
-                {
-                    var content = await res.Content.ReadAsStreamAsync();
-                    StreamReader reader = new StreamReader(content);
-                    string xmlContent = reader.ReadToEnd();
-                    var result = JsonConvert.DeserializeObject<Models.Envios.EnvioResult>(xmlContent);
-
-                    return (res.IsSuccessStatusCode, result);
-                }
-
-                return (false,
-                    new Models.Envios.EnvioResult()
-                    { ResponseXml = await res.Content.ReadAsStringAsync(), Estado = res.ReasonPhrase });
 
             }
         }
