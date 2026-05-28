@@ -22,6 +22,8 @@ namespace SimpleSDK.Models.RegistroCompraVentas
         public long Folio { get; set; }
         public DateTime FechaEmision { get; set; }
         public DateTime? FechaRecepcion { get; set; }
+        [Newtonsoft.Json.JsonProperty("fechaReclamo")]
+        public string FechaReclamo { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string AcuseRecibo { get; set; }
         public int EstadoAcuse { get; set; }
